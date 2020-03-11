@@ -18,6 +18,5 @@ namespace EURIS.VideoStream.Entity
         //Navigation properties
         public UserProfile UserProfile { get; set; }
         public MediaContent MediaContent { get; set; }
-
     }
 }

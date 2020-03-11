@@ -28,6 +28,5 @@ namespace EURIS.VideoStream.Entity
         public SavedMedia SavedMedia { get; set; }
         public Favourites Favourites { get; set; }
         public List<StreamData> StreamData { get; set; }
-
     }
 }

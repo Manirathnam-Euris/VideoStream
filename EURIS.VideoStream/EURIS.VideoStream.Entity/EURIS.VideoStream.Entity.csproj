@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E47BD364-B75E-4C65-8875-617BB9F24278}</ProjectGuid>
+    <ProjectGuid>{62489ED0-397D-4646-8E0D-A7962B613EAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EURIS.VideoStream.Entity</RootNamespace>
