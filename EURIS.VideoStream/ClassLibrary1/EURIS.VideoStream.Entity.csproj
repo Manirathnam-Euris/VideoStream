@@ -7,8 +7,8 @@
     <ProjectGuid>{E47BD364-B75E-4C65-8875-617BB9F24278}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassLibrary1</RootNamespace>
-    <AssemblyName>ClassLibrary1</AssemblyName>
+    <RootNamespace>EURIS.VideoStream.Entity</RootNamespace>
+    <AssemblyName>EURIS.VideoStream.Entity</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
