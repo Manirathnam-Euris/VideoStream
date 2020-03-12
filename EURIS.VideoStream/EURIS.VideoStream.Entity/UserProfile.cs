@@ -13,9 +13,9 @@ namespace EURIS.VideoStream.Entity
         public string ProfileName { get; set; }
 
         //Navigation properties
-        public UserAccount UserAccount { get; set; }
-        public List<StreamData> StreamData { get; set; }
-        public List<SavedMedia> SavedMedia { get; set; }
+        public UserAccount UserAccounts { get; set; }
+        public List<StreamData> StreamDatas { get; set; }
+        public List<SavedMedia> SavedMedias{ get; set; }
         public List<Favourites> Favourites { get; set; }
     }
 }

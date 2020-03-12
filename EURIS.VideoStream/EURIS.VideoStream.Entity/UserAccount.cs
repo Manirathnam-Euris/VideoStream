@@ -19,7 +19,7 @@ namespace EURIS.VideoStream.Entity
         public string CreditCardNumber { get; set; }
 
         //Navigation properties
-        public List<UserProfile> UserProfile { get; set; }
+        public List<UserProfile> UserProfiles { get; set; }
         public Subscription Subscription { get; set; }
     }
 }

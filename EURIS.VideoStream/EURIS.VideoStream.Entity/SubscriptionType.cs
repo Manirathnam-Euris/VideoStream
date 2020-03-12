@@ -14,7 +14,7 @@ namespace EURIS.VideoStream.Entity
         public string Type { get; set; }
 
         //Navigation properties
-        public List<UserProfile> UserProfile { get; set; }
+        public List<UserProfile> UserProfiles { get; set; }
         public Subscription Subscripiton { get; set; }
     }
 }
