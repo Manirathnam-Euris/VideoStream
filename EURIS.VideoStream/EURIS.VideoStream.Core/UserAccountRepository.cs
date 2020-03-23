@@ -50,5 +50,17 @@ namespace EURIS.VideoStream.Core
         {
             db.SaveChanges();
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.db != null)
+                {
+                    this.db.Dispose();
+                    this.db = null;
+                }
+            }
+        }
     }
 }

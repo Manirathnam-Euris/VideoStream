@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,17 +46,18 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("This Profile is already exists");
                 }
-                var profileCount = _UserProfileRep.GetAllUserProfiles().Where(u => u.UserAccount.UserId == userProfile.UserAccount.UserId).Count();
-                if(profileCount > 5)
-                {
-                    throw new Exception("Sorry max of 5 Profiles with this user is already exists");
-                }
+                //var profileCount = _UserProfileRep.GetAllUserProfiles().Where(u => u.UserAccount.UserId == userProfile.UserAccount.UserId).Count();
+                //if(profileCount > 5)
+                //{
+                //    throw new Exception("Sorry max of 5 Profiles with this user is already exists");
+                //}
+
                 _UserProfileRep.InsertUserProfile(userProfile);
                 _UserProfileRep.SaveUserProfile();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -71,9 +73,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 _UserProfileRep.UpdateUserProfile(userProfile);
                 _UserProfileRep.SaveUserProfile();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong");
+                throw new Exception(ex.Message);
             }
         }
 
