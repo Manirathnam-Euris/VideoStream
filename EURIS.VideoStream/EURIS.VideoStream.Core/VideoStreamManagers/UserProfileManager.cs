@@ -12,6 +12,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
     public class UserProfileManager
     {
         private UserProfileRepository _UserProfileRep = new UserProfileRepository();
+        private SubscriptionTypeManager _subscriptionTypeManager = new SubscriptionTypeManager();
+        private StreamDataManager _streamDataManager = new StreamDataManager();
+        private SavedMediaManager _savedMediaManager = new SavedMediaManager();
+        private FavouritesManager _favouritesManager = new FavouritesManager();
+        private UserAccountManager _userAccountManager = new UserAccountManager();
+
         public IEnumerable<UserProfile> GetAllUserProfiles()
         {
             return _UserProfileRep.GetAllUserProfiles().ToList();
@@ -30,11 +36,33 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("User Profiles are not present with this userId:" + userId);
                 }
-                return userProfiles.ToList();
+                return userProfiles.ToList().Select(u => MapUserProfile(u)).ToList();
             }
             catch(SqlException ex)
             {
                 throw new Exception(ex.Message); 
+            }
+        }
+
+        public UserProfile GetUserProfile(Guid profileId)
+        {
+            try
+            {
+                if(profileId == Guid.Empty || profileId == null)
+                {
+                    throw new Exception("Provide Valid Id");
+                }
+                var profile = _UserProfileRep.GetUserProfileById(profileId);
+                if(profile == null)
+                {
+                    throw new Exception("No profile with the provided Id: " + profileId);
+                }
+                //profile.StreamDatas = streamDatas;
+                return MapUserProfile(profile);
+            }
+            catch(SqlException ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -107,6 +135,23 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        internal UserProfile MapUserProfile(UserProfile userProfile)
+        {
+            var modal = new UserProfile()
+            {
+                ProfileId = userProfile.ProfileId,
+                ProfileName = userProfile.ProfileName,
+                UserId = userProfile.UserId,
+                SubscriptionTypeId = userProfile.SubscriptionTypeId,
+                SubscriptionType = _subscriptionTypeManager.GetSubscriptionType(userProfile.SubscriptionTypeId),
+                UserAccount = _userAccountManager.GetUserAccount(userProfile.UserId),
+                StreamDatas = _streamDataManager.GetUserStreamData(userProfile.ProfileId).ToList(),
+                Favourites = _favouritesManager.GetProfileFavourites(userProfile.ProfileId).ToList(),
+                SavedMedias = _savedMediaManager.GetProfileSavedMedia(userProfile.ProfileId).ToList()
+            };
+            return modal;
         }
     }
 }

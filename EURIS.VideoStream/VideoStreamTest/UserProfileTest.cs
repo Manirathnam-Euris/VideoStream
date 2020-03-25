@@ -44,6 +44,12 @@ namespace VideoStreamTest
         }
 
         [TestMethod()]
+        public void GetProfileTest()
+        {
+            var profile = _profileManager.GetUserProfile(new Guid("922DB99E-572B-4BEA-91BB-1793F3CD6492"));
+        }
+
+        [TestMethod()]
         public void DeleteProfileTest()
         {
             _profileManager.DeleteUserProfile(new Guid("E1B90689-3E0C-4955-B6EE-07EF6D8F4826"));
