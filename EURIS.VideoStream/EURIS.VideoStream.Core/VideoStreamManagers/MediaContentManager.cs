@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,9 +32,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 }
                 return mediaExists;
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while getting the media with this Id :" + contentId);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -49,9 +50,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 _MediaContentRep.InsertMediaContent(mediaContent);
                 _MediaContentRep.SaveMediaContent();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong in Adding media content");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -64,12 +65,25 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Media is not exists to update");
                 }
-                _MediaContentRep.UpdateMediaContent(mediaContent);
+                mediaExists.Title = mediaContent.Title;
+                mediaExists.Episode = mediaContent.Episode;
+                mediaExists.Genre = mediaContent.Genre;
+                mediaExists.TimeLength = mediaContent.TimeLength;
+                mediaExists.ReleaseDate = mediaContent.ReleaseDate;
+                mediaExists.Distributor = mediaContent.Distributor;
+                mediaExists.Language = mediaContent.Language;
+                mediaExists.AverageRating = mediaContent.AverageRating;
+                mediaExists.HeroineName = mediaContent.HeroineName;
+                mediaExists.HeroName = mediaContent.HeroName;
+                mediaExists.Director = mediaContent.Director;
+                mediaExists.Producer = mediaContent.Producer;
+                mediaExists.ProductionHouse = mediaContent.ProductionHouse;
+                _MediaContentRep.UpdateMediaContent(mediaExists);
                 _MediaContentRep.SaveMediaContent();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while updating the media content");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -86,12 +100,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Media is not exists whith this id:" + contentId);
                 }
-                _MediaContentRep.DeleteMediaContent(contentId);
+                _MediaContentRep.DeleteMediaContent(mediaExists.ContentId);
                 _MediaContentRep.SaveMediaContent();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while deleting content");
+                throw new Exception(ex.Message);
             }
         }
     }

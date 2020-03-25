@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,9 +33,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 }
                 return subscripitonExists;
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while getting with this Id: " + subscriptionId);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -47,16 +48,17 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                     throw new Exception("Provide valid Id");
                 }
 
-                var subscription = _SubscripitionRep.GetAllSubscripitons().Where(s => s.UserAccount.UserId == userId).Single();
+                //var subscription = _SubscripitionRep.GetAllSubscripitons().Where(s => s.UserAccount.UserId == userId).Single();
+                var subscription = GetSubscription(userId);
                 if (subscription == null)
                 {
                     throw new Exception("There is no subscriptions with this userId:" + userId);
                 }
                 return subscription;
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while getting subscription with userId:" + userId);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -69,12 +71,13 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("This subscription is already exists :" + subscription.SubscriptionId);
                 }
+
                 _SubscripitionRep.InsertSubscripiton(subscription);
                 _SubscripitionRep.SaveSubscription();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while Adding subscripiton");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -87,12 +90,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("This Subscripiton is not exists with this id :" + subscription.SubscriptionId);
                 }
-                _SubscripitionRep.UpdateSubscription(subscription);
+                subscriptionExists.Price = subscription.Price;
+                subscriptionExists.StartDate = subscription.StartDate;
+                subscriptionExists.EndDate = subscription.EndDate;
+
+                _SubscripitionRep.UpdateSubscription(subscriptionExists);
                 _SubscripitionRep.SaveSubscription();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while updating");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -109,12 +116,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Subscription is not exists with this id:" + subscriptionId);
                 }
-                _SubscripitionRep.DeleteSubscription(subscriptionId);
+                _SubscripitionRep.DeleteSubscription(subscripitonExists.SubscriptionId);
                 _SubscripitionRep.SaveSubscription();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while deleting the subscription");
+                throw new Exception(ex.Message);
             }
         }
     }

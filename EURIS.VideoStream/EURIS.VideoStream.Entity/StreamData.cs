@@ -16,6 +16,8 @@ namespace EURIS.VideoStream.Entity
         public DateTime StreamTime { get; set; }
         public int StreamLength { get; set; }
         public string StreamRate { get; set; }
+        public Guid UserProfileId { get; set; }
+        public Guid ContentId { get; set; }
 
         //Navigation properties
         public UserProfile UserProfile { get; set; }

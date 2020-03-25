@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,9 +32,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 }
                 return streamExists;
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while getting the stream");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -45,18 +46,39 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var streamDatas = _StreamDataRep.GetAllStreamData().Where(s => s.MediaContent.ContentId == contentId);
+                var streamDatas = _StreamDataRep.GetAllStreamData().Where(s => s.ContentId == contentId);
                 if(streamDatas == null)
                 {
                     throw new Exception("No stream data is present with this content Id:" + contentId);
                 }
                 return streamDatas.ToList();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while getting the stream data for this id:" + contentId);
+                throw new Exception(ex.Message);
             }
-            
+
+        }
+
+        public IEnumerable<StreamData> GetUserStreamData(Guid profileId)
+        {
+            try
+            {
+                if(profileId == Guid.Empty || profileId == null)
+                {
+                    throw new Exception("Provide valid Id");
+                }
+                var streamExists = _StreamDataRep.GetAllStreamData().Where(s => s.UserProfileId == profileId);
+                if(streamExists == null)
+                {
+                    throw new Exception("There is no streams with the profile Id: " + profileId);
+                }
+                return streamExists.ToList();
+            }
+            catch(SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public void AddStreamData(StreamData streamData)
@@ -71,9 +93,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 _StreamDataRep.InsertStreamData(streamData);
                 _StreamDataRep.SaveStreamData();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while Adding stream Data");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -86,12 +108,19 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Stream data is not present with this Id: " + streamData.StreamDataId);
                 }
-                _StreamDataRep.UpdateStreamData(streamData);
+                streamExists.StreamDate = streamData.StreamDate;
+                streamExists.StreamTime = streamData.StreamTime;
+                streamExists.StreamLength = streamData.StreamLength;
+                streamExists.StreamRate = streamData.StreamRate;
+                streamExists.ContentId = streamData.ContentId;
+                streamExists.UserProfileId = streamData.UserProfileId;
+
+                _StreamDataRep.UpdateStreamData(streamExists);
                 _StreamDataRep.SaveStreamData();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while updating the stream Data");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -111,9 +140,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 _StreamDataRep.DeleteStreamData(streamId);
                 _StreamDataRep.SaveStreamData();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while deleting the streamData");
+                throw new Exception(ex.Message);
             }
         }
     }

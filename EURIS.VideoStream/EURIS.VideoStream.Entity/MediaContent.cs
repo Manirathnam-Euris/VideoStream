@@ -25,10 +25,12 @@ namespace EURIS.VideoStream.Entity
         public string Director { get; set; }
         public string Producer { get; set; }
         public string ProductionHouse { get; set; }
+        //public Guid SavedMediaId { get; set; }
+        //public Guid FavouritesId { get; set; }
 
         //Navigation Properties
-        public SavedMedia SavedMedia { get; set; }
-        public Favourites Favourites { get; set; }
-        public List<StreamData> StreamDatas { get; set; }
+        //public virtual SavedMedia SavedMedia { get; set; }
+        //public virtual Favourites Favourites { get; set; }
+        public virtual ICollection<StreamData> StreamDatas { get; set; }
     }
 }

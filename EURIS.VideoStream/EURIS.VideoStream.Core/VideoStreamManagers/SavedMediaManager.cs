@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,9 +32,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 }
                 return savedMediaExists;
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while getting the saved media with this Id: " + savedMediaId);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -45,16 +46,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var savedMediaExists = _SavedMediaRep.GetAllSavedMedia().Where(s => s.UserProfile.ProfileId == profileId);
+                var savedMediaExists = _SavedMediaRep.GetAllSavedMedia().Where(s => s.UserProfileId == profileId);
                 if(savedMediaExists == null)
                 {
                     throw new Exception("No data found with this profile Id:" + profileId);
                 }
                 return savedMediaExists.ToList();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while getting the Saved media with  profile Id:" + profileId);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -70,9 +71,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 _SavedMediaRep.InsertMedia(savedMedia);
                 _SavedMediaRep.SaveToSavedMedia();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while Adding saved media");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -85,12 +86,37 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("There is no saved media to update with this Id: " + savedMedia.SavedMediaId);
                 }
-                _SavedMediaRep.UpdateSavedMedia(savedMedia);
+                savedMediaExists.Name = savedMedia.Name;
+                savedMediaExists.UserProfileId = savedMedia.UserProfileId;
+                savedMediaExists.ContentId = savedMedia.ContentId;
+
+                _SavedMediaRep.UpdateSavedMedia(savedMediaExists);
                 _SavedMediaRep.SaveToSavedMedia();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while updating the Saved media");
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<SavedMedia> GetContentSavedMedia(Guid contentId)
+        {
+            try
+            {
+                if(contentId == Guid.Empty || contentId == null)
+                {
+                    throw new Exception("Please provide valid contentId");
+                }
+                var savedMediaExists = _SavedMediaRep.GetAllSavedMedia().Where(s => s.ContentId == contentId);
+                if (savedMediaExists == null)
+                {
+                    throw new Exception("No data found with this profile Id:" + contentId);
+                }
+                return savedMediaExists.ToList();
+            }
+            catch(SqlException ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -107,12 +133,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("There is no saved media with this Id:" + savedMediaId);
                 }
-                _SavedMediaRep.DeleteSavedMedia(savedMediaId);
+                _SavedMediaRep.DeleteSavedMedia(savedMediaExists.SavedMediaId);
                 _SavedMediaRep.SaveToSavedMedia();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something wrong while deleting the saved media");
+                throw new Exception(ex.Message);
             }
         } 
     }

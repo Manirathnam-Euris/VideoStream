@@ -57,6 +57,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FavouritesTest.cs" />
+    <Compile Include="MediaContentTest.cs" />
+    <Compile Include="SavedMediaTest.cs" />
+    <Compile Include="StreamDataTest.cs" />
+    <Compile Include="SubsciptionTest.cs" />
+    <Compile Include="SubsctiptionTypeTest.cs" />
     <Compile Include="UserAccountTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserProfileTest.cs" />

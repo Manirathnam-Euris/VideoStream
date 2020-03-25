@@ -7,13 +7,13 @@ namespace EURIS.VideoStream.Entity.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.0")]
-    public sealed partial class InitialModel : IMigrationMetadata
+    public sealed partial class intial_model : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialModel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(intial_model));
         
         string IMigrationMetadata.Id
         {
-            get { return "202003121011506_InitialModel"; }
+            get { return "202003242118082_intial_model"; }
         }
         
         string IMigrationMetadata.Source

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,9 +32,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 }
                 return subscriptionTypeExists;
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while getting the subscriptions");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -45,16 +46,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var subscripitionTypeExists = _SubscriptionTypeRep.GetAllSubscripitonTypes().Where(s => s.Subscripiton.SubscriptionId == subscriptionId);
+                var subscripitionTypeExists = _SubscriptionTypeRep.GetAllSubscripitonTypes().Where(s => s.SubscriptionId == subscriptionId);
                 if(subscripitionTypeExists == null)
                 {
                     throw new Exception("Subscription types with ths subscription Id is not present :" + subscriptionId);
                 }
                 return subscripitionTypeExists.ToList();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while getting subscription types");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -67,12 +68,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Subscription type is not found with this Id :" + subscriptionType.SubscriptionTypeId);
                 }
-                _SubscriptionTypeRep.InsertSubscripitonType(subscriptionType);
+                subscriptionTypeExists.Name = subscriptionType.Name;
+                subscriptionTypeExists.Type = subscriptionType.Type;
+                subscriptionTypeExists.SubscriptionId = subscriptionType.SubscriptionId;
+
+                _SubscriptionTypeRep.InsertSubscripitonType(subscriptionTypeExists);
                 _SubscriptionTypeRep.SaveSubscriptionType();
             }
-            catch
+            catch (SqlException ex)
             {
-                throw new Exception("Something went wrong while updating the subscription type");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -88,9 +93,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 _SubscriptionTypeRep.InsertSubscripitonType(subscriptionType);
                 _SubscriptionTypeRep.SaveSubscriptionType();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while adding subscription type");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -107,12 +112,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                 throw new Exception("Subscription type is not present with the Id:" + subscriptionTypeId);
                 }
-                _SubscriptionTypeRep.DeleteSubscriptionType(subscriptionTypeId);
+                _SubscriptionTypeRep.DeleteSubscriptionType(subscriptionTypeExists.SubscriptionTypeId);
                 _SubscriptionTypeRep.SaveSubscriptionType();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while deleting the subcription type");
+                throw new Exception(ex.Message);
             }
         }
 

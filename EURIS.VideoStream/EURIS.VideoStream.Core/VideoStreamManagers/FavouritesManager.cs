@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,9 +32,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 }
                 return favoriteExists;
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while getting favourite");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -45,16 +46,37 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var favouritesExists = _FavouritesRep.GetAllFavourites().Where(s => s.UserProfile.ProfileId == profileId);
+                var favouritesExists = _FavouritesRep.GetAllFavourites().Where(s => s.UserProfileId == profileId);
                 if (favouritesExists == null)
                 {
                     throw new Exception("No data found with this profile Id:" + profileId);
                 }
                 return favouritesExists.ToList();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while getting favourites with Id:"+ profileId);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IEnumerable<Favourites> GetContentFavourites(Guid contentId)
+        {
+            try
+            {
+                if (contentId == Guid.Empty || contentId == null)
+                {
+                    throw new Exception("Provide valid Id");
+                }
+                var favouritesExists = _FavouritesRep.GetAllFavourites().Where(s => s.ContentId == contentId);
+                if (favouritesExists == null)
+                {
+                    throw new Exception("No data found with this profile Id:" + contentId);
+                }
+                return favouritesExists.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -67,12 +89,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("There is no favorites with the favourite id: " + favourites.FavouritesId);
                 }
-                _FavouritesRep.UpdateFavourite(favourites);
+                favouriteExists.Name = favourites.Name;
+                favourites.UserProfileId = favourites.UserProfileId;
+                favourites.ContentId = favourites.ContentId;
+
+                _FavouritesRep.UpdateFavourite(favouriteExists);
                 _FavouritesRep.SaveFavourite();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while updating favourites");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -88,9 +114,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 _FavouritesRep.InsertFavourite(favourites);
                 _FavouritesRep.SaveFavourite();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while Adding favourite");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -103,12 +129,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("No favourites are found with the Id:" + favouriteId);
                 }
-                _FavouritesRep.DeleteFavourite(favouriteId);
+                _FavouritesRep.DeleteFavourite(favouriteExists.FavouritesId);
                 _FavouritesRep.SaveFavourite();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong while deleting favourite");
+                throw new Exception(ex.Message);
             }
         }
     }

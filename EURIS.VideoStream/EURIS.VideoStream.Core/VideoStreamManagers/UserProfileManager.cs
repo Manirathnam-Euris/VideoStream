@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -24,16 +25,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var userProfiles = _UserProfileRep.GetAllUserProfiles().Where(u => u.UserAccount.UserId == userId);
+                var userProfiles = _UserProfileRep.GetAllUserProfiles().Where(u => u.UserId == userId);
                 if(userProfiles == null)
                 {
                     throw new Exception("User Profiles are not present with this userId:" + userId);
                 }
                 return userProfiles.ToList();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong"); 
+                throw new Exception(ex.Message); 
             }
         }
 
@@ -46,14 +47,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("This Profile is already exists");
                 }
-                //var profileCount = _UserProfileRep.GetAllUserProfiles().Where(u => u.UserAccount.UserId == userProfile.UserAccount.UserId).Count();
-                //if(profileCount > 5)
-                //{
-                //    throw new Exception("Sorry max of 5 Profiles with this user is already exists");
-                //}
-
-                _UserProfileRep.InsertUserProfile(userProfile);
-                _UserProfileRep.SaveUserProfile();
+                var profileCount = _UserProfileRep.GetAllUserProfiles().Where(u => u.UserId == userProfile.UserId).Count();
+                if (profileCount >= 5)
+                {
+                    throw new Exception("Sorry max of 5 Profiles with this user is already exists");
+                }
+                using (var dbcontext = new VideoStreamContext())
+                {
+                    _UserProfileRep.InsertUserProfile(userProfile);
+                    _UserProfileRep.SaveUserProfile();
+                } 
             }
             catch(SqlException ex)
             {
@@ -70,7 +73,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("This profile is not exists");
                 }
-                _UserProfileRep.UpdateUserProfile(userProfile);
+                profileExists.ProfileId = userProfile.ProfileId;
+                profileExists.ProfileName = userProfile.ProfileName;
+                profileExists.UserId = userProfile.UserId;
+                profileExists.SubscriptionTypeId = userProfile.SubscriptionTypeId;
+
+                _UserProfileRep.UpdateUserProfile(profileExists);
                 _UserProfileRep.SaveUserProfile();
             }
             catch(SqlException ex)
@@ -92,12 +100,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("This profile is not Exists for deletion");
                 }
-                _UserProfileRep.DeleteUserProfile(profileId);
+                _UserProfileRep.DeleteUserProfile(profileExists.ProfileId);
                 _UserProfileRep.SaveUserProfile();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong for Profile deletion");
+                throw new Exception(ex.Message);
             }
         }
     }

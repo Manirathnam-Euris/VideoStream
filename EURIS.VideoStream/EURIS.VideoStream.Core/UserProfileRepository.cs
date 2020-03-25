@@ -35,9 +35,9 @@ namespace EURIS.VideoStream.Core
             dbSet.Add(Uprofile);
         }
 
-        public void UpdateUserProfile(UserProfile User)
+        public void UpdateUserProfile(UserProfile Userprofile)
         {
-            db.Entry(User).State = EntityState.Modified;
+            db.Entry(Userprofile).State = EntityState.Modified;
         }
 
         public void DeleteUserProfile(Guid ProfileId)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,9 +31,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 }
                 return userExists;
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong");
+                throw new Exception(ex.Message);
             }
         }
         public void AddUserAccount(UserAccount user)
@@ -47,9 +48,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 _UserAccountRep.InsertUserAccount(user);
                 _UserAccountRep.SaveUserAccount();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -62,12 +63,20 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("User not exists please create user");
                 }
-                _UserAccountRep.UpdateUserAccount(user);
+                userExists.Address = user.Address;
+                userExists.ContactNumber = user.ContactNumber;
+                userExists.CreditCardNumber = user.CreditCardNumber;
+                userExists.DateOfBirth = user.DateOfBirth;
+                userExists.Email = user.Email;
+                userExists.SurName = user.SurName;
+                userExists.Name = user.Name;
+
+                _UserAccountRep.UpdateUserAccount(userExists);
                 _UserAccountRep.SaveUserAccount();
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -84,13 +93,13 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("User not found with this Id");
                 }
-                _UserAccountRep.DeleteUserAccount(userId);
+                _UserAccountRep.DeleteUserAccount(user.UserId);
                 _UserAccountRep.SaveUserAccount();
                 return true;
             }
-            catch
+            catch(SqlException ex)
             {
-                throw new Exception("Something went wrong");
+                throw new Exception(ex.Message);
             }
         }
     }

@@ -12,21 +12,41 @@ namespace VideoStreamTest
     [TestClass]
     public class UserProfileTest
     {
-        private UserProfile _Up = new UserProfile();
-        private UserAccount _UAccount = new UserAccount();
-        private UserAccountManager _Um = new UserAccountManager();
-        private UserProfileManager _profile = new UserProfileManager();
+        private UserProfile _userProfile = new UserProfile();
+        private UserProfileManager _profileManager = new UserProfileManager();
 
         [TestMethod()]
-        public void AaddUserProfileTest()
+        public void AddUserProfileTest()
         {
-            _Up.ProfileId = Guid.NewGuid();
-            _Up.ProfileName = "Uprofile";
-            _Up.UserAccount.UserId
-            //_Up.UserAccount = _Um.GetUserAccount(new Guid("C7890CBD-66C8-4F35-89D5-FAF8BF0944C4"));
-            _profile.AddUserProfile(_Up);
+            _userProfile.ProfileId = Guid.NewGuid();
+            _userProfile.ProfileName = "Roberto";
+            _userProfile.UserId = new Guid("2305115C-E4AA-4069-988B-E7606E5F4147");
+            _userProfile.SubscriptionTypeId = new Guid("CD9524FE-B8C9-48CD-9780-624657E51217");
+            _profileManager.UpdateUserProfile(_userProfile);
    
             //Assert.IsTrue(true);
+        }
+
+        [TestMethod()]
+        public void UpdateProfileTest()
+        {
+            _userProfile.ProfileId = new Guid("922DB99E-572B-4BEA-91BB-1793F3CD6492");
+            _userProfile.ProfileName = "Roberto";
+            _userProfile.UserId = new Guid("2305115C-E4AA-4069-988B-E7606E5F4147");
+            _userProfile.SubscriptionTypeId = new Guid("CD9524FE-B8C9-48CD-9780-624657E51217");
+            _profileManager.UpdateUserProfile(_userProfile);
+        }
+
+        [TestMethod()]
+        public void GetUserProfiles()
+        {
+           var userProfiles = _profileManager.GetUserProfiles(new Guid("2305115C-E4AA-4069-988B-E7606E5F4147"));
+        }
+
+        [TestMethod()]
+        public void DeleteProfileTest()
+        {
+            _profileManager.DeleteUserProfile(new Guid("E1B90689-3E0C-4955-B6EE-07EF6D8F4826"));
         }
     }
 }

@@ -14,9 +14,10 @@ namespace EURIS.VideoStream.Entity
         public Guid SubscriptionTypeId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+        public Guid SubscriptionId { get; set; }
 
         //Navigation properties
-        public List<UserProfile> UserProfiles { get; set; }
+        public virtual ICollection<UserProfile> UserProfiles { get; set; }
         public Subscription Subscripiton { get; set; }
     }
 }
