@@ -12,11 +12,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
     public class UserProfileManager
     {
         private UserProfileRepository _UserProfileRep = new UserProfileRepository();
-        private SubscriptionTypeManager _subscriptionTypeManager = new SubscriptionTypeManager();
-        private StreamDataManager _streamDataManager = new StreamDataManager();
-        private SavedMediaManager _savedMediaManager = new SavedMediaManager();
-        private FavouritesManager _favouritesManager = new FavouritesManager();
-        private UserAccountManager _userAccountManager = new UserAccountManager();
+        //private SubscriptionTypeManager _subscriptionTypeManager = new SubscriptionTypeManager();
+        //private StreamDataManager _streamDataManager = new StreamDataManager();
+        //private SavedMediaManager _savedMediaManager = new SavedMediaManager();
+        //private FavouritesManager _favouritesManager = new FavouritesManager();
+        //private UserAccountManager _userAccountManager = new UserAccountManager();
 
         public IEnumerable<UserProfile> GetAllUserProfiles()
         {
@@ -139,17 +139,23 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 
         internal UserProfile MapUserProfile(UserProfile userProfile)
         {
+            var _userAccountRepository = new UserAccountRepository();
+            var _subscriptionTypeRep = new SubscriptionTypeRepository();
+            var _streamDataRep = new StreamDataRepository();
+            var _favoritesRep = new FavouritesRepository();
+            var _savedMediaRep = new SavedMediaRepository();
+
             var modal = new UserProfile()
             {
                 ProfileId = userProfile.ProfileId,
                 ProfileName = userProfile.ProfileName,
                 UserId = userProfile.UserId,
                 SubscriptionTypeId = userProfile.SubscriptionTypeId,
-                SubscriptionType = _subscriptionTypeManager.GetSubscriptionType(userProfile.SubscriptionTypeId),
-                UserAccount = _userAccountManager.GetUserAccount(userProfile.UserId),
-                StreamDatas = _streamDataManager.GetUserStreamData(userProfile.ProfileId).ToList(),
-                Favourites = _favouritesManager.GetProfileFavourites(userProfile.ProfileId).ToList(),
-                SavedMedias = _savedMediaManager.GetProfileSavedMedia(userProfile.ProfileId).ToList()
+                SubscriptionType = _subscriptionTypeRep.GetSubscriptionTypeById(userProfile.SubscriptionTypeId),
+                UserAccount = _userAccountRepository.GetUserAccountById(userProfile.UserId),
+                StreamDatas = _streamDataRep.GetAllStreamData().Where(s => s.UserProfileId == userProfile.ProfileId).ToList(),
+                Favourites = _favoritesRep.GetAllFavourites().Where(f => f.UserProfileId == userProfile.ProfileId).ToList(),
+                SavedMedias = _savedMediaRep.GetAllSavedMedia().Where(s => s.UserProfileId == userProfile.UserId).ToList()
             };
             return modal;
         }

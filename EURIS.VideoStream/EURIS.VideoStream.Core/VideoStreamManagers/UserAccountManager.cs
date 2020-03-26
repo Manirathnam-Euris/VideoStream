@@ -13,7 +13,14 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         private UserAccountRepository _UserAccountRep = new UserAccountRepository();
         public IEnumerable<UserAccount> GetAllUserAccounts()
         {
-            return _UserAccountRep.GetAllUserAccounts().ToList();
+            var users = _UserAccountRep.GetAllUserAccounts();
+            var userList = new List<UserAccount>();
+
+            foreach (var user in users)
+            {
+                userList.Add(MapUserAccount(user));
+            }
+            return userList;
         }
 
         public UserAccount GetUserAccount(Guid userId)
@@ -29,7 +36,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("User not Exists with this :" + userId);
                 }
-                return userExists;
+                return MapUserAccount(userExists);
             }
             catch(SqlException ex)
             {
@@ -101,6 +108,25 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        internal UserAccount MapUserAccount(UserAccount user)
+        {
+            var _userProfileRep = new UserProfileRepository();
+
+            return new UserAccount()
+            {
+                UserId = user.UserId,
+                Name = user.Name,
+                SurName = user.SurName,
+                Address = user.Address,
+                Email = user.Email,
+                ContactNumber = user.ContactNumber,
+                DateOfBirth = user.DateOfBirth,
+                CreditCardNumber = user.CreditCardNumber,
+                SubscriptionId = user.SubscriptionId,
+                UserProfiles = _userProfileRep.GetAllUserProfiles().Where(u => u.UserId == user.UserId).ToList()
+            };
         }
     }
 }

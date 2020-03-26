@@ -30,14 +30,14 @@ namespace VideoStreamTest
         [TestMethod]
         public void GetUserByIdTest()
         {
-            _accountManager.GetUserAccount(new Guid("50529C8D-7081-43E0-BEB9-0FF9B8972966"));
+            var user =_accountManager.GetUserAccount(new Guid("2305115C-E4AA-4069-988B-E7606E5F4147"));
             Assert.IsTrue(true);
         }
 
         [TestMethod]
         public void GetUserAccountTest()
         {
-            _accountManager.GetAllUserAccounts();
+            var users = _accountManager.GetAllUserAccounts();
             Assert.IsTrue(true);
         }
 
