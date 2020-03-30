@@ -20,9 +20,9 @@ namespace VideoStreamTest
         {
             _userProfile.ProfileId = Guid.NewGuid();
             _userProfile.ProfileName = "Roberto";
-            _userProfile.UserId = new Guid("2305115C-E4AA-4069-988B-E7606E5F4147");
+            _userProfile.UserId = new Guid("18F90E11-7FFF-473F-B428-584EF23B576E");
             _userProfile.SubscriptionTypeId = new Guid("CD9524FE-B8C9-48CD-9780-624657E51217");
-            _profileManager.UpdateUserProfile(_userProfile);
+            _profileManager.AddUserProfile(_userProfile);
    
             //Assert.IsTrue(true);
         }
