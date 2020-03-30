@@ -15,7 +15,6 @@ namespace EURIS.VideoStream.Interfaces
         void UpdateFavourite(Favourites entity);
         void DeleteFavourite(Guid favouriteId);
         void SaveFavourite();
-		//Testing the git
     }
 
     public interface IUserAccount
