@@ -14,9 +14,9 @@ namespace EURIS.VideoStream.Core
         private VideoStreamContext db;
         private DbSet<UserAccount> dbSet;
 
-        public UserAccountRepository()
+        public UserAccountRepository(VideoStreamContext _videoStreamContext)
         {
-            db = new VideoStreamContext();
+            db = _videoStreamContext;
             dbSet = db.Set<UserAccount>();
         }
 

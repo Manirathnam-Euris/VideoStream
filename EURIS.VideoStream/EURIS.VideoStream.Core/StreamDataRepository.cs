@@ -14,9 +14,9 @@ namespace EURIS.VideoStream.Core
         private VideoStreamContext db;
         private DbSet<StreamData> dbSet;
 
-        public StreamDataRepository()
+        public StreamDataRepository(VideoStreamContext _videoStreamContext)
         {
-            db = new VideoStreamContext();
+            db = _videoStreamContext;
             dbSet = db.Set<StreamData>();
         }
 

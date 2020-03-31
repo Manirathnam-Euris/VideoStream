@@ -14,9 +14,9 @@ namespace EURIS.VideoStream.Core
         private VideoStreamContext db;
         private DbSet<Favourites> dbSet;
 
-        public FavouritesRepository()
+        public FavouritesRepository(VideoStreamContext _videoStreamContext)
         {
-            db = new VideoStreamContext();
+            db = _videoStreamContext;
             dbSet = db.Set<Favourites>();
         }
 

@@ -10,11 +10,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 {
     public class StreamDataManager
     {
-        private StreamDataRepository _StreamDataRep = new StreamDataRepository();
+        //private StreamDataRepository _StreamDataRep = new StreamDataRepository();
+        UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
 
         public IEnumerable<StreamData> GetAllStreamDatas()
         {
-            return _StreamDataRep.GetAllStreamData().ToList();
+            return _unitOfWork.StreamRep.GetAllStreamData().ToList();
         }
 
         public StreamData GetStreamData(Guid streamId)
@@ -25,7 +26,8 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var streamExists = _StreamDataRep.GetStreamDataById(streamId);
+                //var streamExists = _StreamDataRep.GetStreamDataById(streamId);
+                var streamExists = _unitOfWork.StreamRep.GetStreamDataById(streamId);
                 if (streamExists == null)
                 {
                     throw new Exception("Stream doesnot exists with this Id:" + streamId);
@@ -46,8 +48,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var streamDatas = _StreamDataRep.GetAllStreamData().Where(s => s.ContentId == contentId);
-                if(streamDatas == null)
+                //var streamDatas = _StreamDataRep.GetAllStreamData().Where(s => s.ContentId == contentId);
+                var streamDatas = _unitOfWork.StreamRep.GetAllStreamData().Where(s => s.ContentId == contentId);
+                if (streamDatas == null)
                 {
                     throw new Exception("No stream data is present with this content Id:" + contentId);
                 }
@@ -68,8 +71,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var streamExists = _StreamDataRep.GetAllStreamData().Where(s => s.UserProfileId == profileId);
-                if(streamExists == null)
+                //var streamExists = _StreamDataRep.GetAllStreamData().Where(s => s.UserProfileId == profileId);
+                var streamExists = _unitOfWork.StreamRep.GetAllStreamData().Where(s => s.UserProfileId == profileId);
+                if (streamExists == null)
                 {
                     throw new Exception("There is no streams with the profile Id: " + profileId);
                 }
@@ -85,13 +89,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var streamExists = _StreamDataRep.GetStreamDataById(streamData.StreamDataId);
-                if(streamExists != null)
+                //var streamExists = _StreamDataRep.GetStreamDataById(streamData.StreamDataId);
+                var streamExists = _unitOfWork.StreamRep.GetStreamDataById(streamData.StreamDataId);
+                if (streamExists != null)
                 {
                     throw new Exception("This stream data is already present in the data Id:" + streamData.StreamDataId);
                 }
-                _StreamDataRep.InsertStreamData(streamData);
-                _StreamDataRep.SaveStreamData();
+                //_StreamDataRep.InsertStreamData(streamData);
+                //_StreamDataRep.SaveStreamData();
+                _unitOfWork.StreamRep.InsertStreamData(streamData);
+                _unitOfWork.Save();
             }
             catch (SqlException ex)
             {
@@ -103,8 +110,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var streamExists = _StreamDataRep.GetStreamDataById(streamData.StreamDataId);
-                if(streamExists == null)
+                //var streamExists = _StreamDataRep.GetStreamDataById(streamData.StreamDataId);
+                var streamExists = _unitOfWork.StreamRep.GetStreamDataById(streamData.StreamDataId);
+                if (streamExists == null)
                 {
                     throw new Exception("Stream data is not present with this Id: " + streamData.StreamDataId);
                 }
@@ -115,8 +123,10 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 streamExists.ContentId = streamData.ContentId;
                 streamExists.UserProfileId = streamData.UserProfileId;
 
-                _StreamDataRep.UpdateStreamData(streamExists);
-                _StreamDataRep.SaveStreamData();
+                //_StreamDataRep.UpdateStreamData(streamExists);
+                //_StreamDataRep.SaveStreamData();
+                _unitOfWork.StreamRep.UpdateStreamData(streamExists);
+                _unitOfWork.Save();
             }
             catch (SqlException ex)
             {
@@ -132,13 +142,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var streamExists = _StreamDataRep.GetStreamDataById(streamId);
-                if(streamExists == null)
+                //var streamExists = _StreamDataRep.GetStreamDataById(streamId);
+                var streamExists = _unitOfWork.StreamRep.GetStreamDataById(streamId);
+                if (streamExists == null)
                 {
                     throw new Exception("Stream data is not present with this Id:" + streamId);
                 }
-                _StreamDataRep.DeleteStreamData(streamId);
-                _StreamDataRep.SaveStreamData();
+                //_StreamDataRep.DeleteStreamData(streamId);
+                //_StreamDataRep.SaveStreamData();
+                _unitOfWork.StreamRep.DeleteStreamData(streamId);
+                _unitOfWork.Save();
             }
             catch (SqlException ex)
             {

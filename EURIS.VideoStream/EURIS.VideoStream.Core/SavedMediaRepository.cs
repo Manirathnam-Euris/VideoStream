@@ -14,9 +14,9 @@ namespace EURIS.VideoStream.Core
         private VideoStreamContext db;
         private DbSet<SavedMedia> dbSet;
 
-        public SavedMediaRepository()
+        public SavedMediaRepository(VideoStreamContext _videoStreamContext)
         {
-            db = new VideoStreamContext();
+            db = _videoStreamContext;
             dbSet = db.Set<SavedMedia>();
         }
 

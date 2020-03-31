@@ -135,6 +135,7 @@
     <Compile Include="StreamDataRepository.cs" />
     <Compile Include="SubscripitionRepository.cs" />
     <Compile Include="SubscriptionTypeRepository.cs" />
+    <Compile Include="UnitOfWork.cs" />
     <Compile Include="UserAccountRepository.cs" />
     <Compile Include="UserProfileRepository.cs" />
     <Compile Include="VideoStreamManagers\FavouritesManager.cs" />

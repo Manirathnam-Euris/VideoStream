@@ -10,11 +10,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 {
     public class SubscriptionManager
     {
-        private SubscripitionRepository _SubscripitionRep = new SubscripitionRepository();
+        //private SubscripitionRepository _SubscripitionRep = new SubscripitionRepository();
+        UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
 
         public IEnumerable<Subscription> GetAllSubscriptions()
         {
-            return _SubscripitionRep.GetAllSubscripitons().ToList();
+            return _unitOfWork.SubscriptionRep.GetAllSubscripitons().ToList();
         }
         
         public Subscription GetSubscription(Guid subscriptionId)
@@ -26,8 +27,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                     throw new Exception("Provide valid Id");
                 }
 
-                var subscripitonExists = _SubscripitionRep.GetSubscriptionById(subscriptionId);
-                if(subscripitonExists == null)
+                //var subscripitonExists = _SubscripitionRep.GetSubscriptionById(subscriptionId);
+                var subscripitonExists = _unitOfWork.SubscriptionRep.GetSubscriptionById(subscriptionId);
+                if (subscripitonExists == null)
                 {
                     throw new Exception("Subscription is not exists with this id :" + subscriptionId);
                 }
@@ -66,14 +68,17 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var subscriptionExists = _SubscripitionRep.GetSubscriptionById(subscription.SubscriptionId);
+                //var subscriptionExists = _SubscripitionRep.GetSubscriptionById(subscription.SubscriptionId);
+                var subscriptionExists = _unitOfWork.SubscriptionRep.GetSubscriptionById(subscription.SubscriptionId);
                 if (subscriptionExists != null)
                 {
                     throw new Exception("This subscription is already exists :" + subscription.SubscriptionId);
                 }
 
-                _SubscripitionRep.InsertSubscripiton(subscription);
-                _SubscripitionRep.SaveSubscription();
+                //_SubscripitionRep.InsertSubscripiton(subscription);
+                //_SubscripitionRep.SaveSubscription();
+                _unitOfWork.SubscriptionRep.InsertSubscripiton(subscription);
+                _unitOfWork.Save();
             }
             catch(SqlException ex)
             {
@@ -85,8 +90,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var subscriptionExists = _SubscripitionRep.GetSubscriptionById(subscription.SubscriptionId);
-                if(subscriptionExists == null)
+                //var subscriptionExists = _SubscripitionRep.GetSubscriptionById(subscription.SubscriptionId);
+                var subscriptionExists = _unitOfWork.SubscriptionRep.GetSubscriptionById(subscription.SubscriptionId);
+                if (subscriptionExists == null)
                 {
                     throw new Exception("This Subscripiton is not exists with this id :" + subscription.SubscriptionId);
                 }
@@ -94,8 +100,10 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 subscriptionExists.StartDate = subscription.StartDate;
                 subscriptionExists.EndDate = subscription.EndDate;
 
-                _SubscripitionRep.UpdateSubscription(subscriptionExists);
-                _SubscripitionRep.SaveSubscription();
+                //_SubscripitionRep.UpdateSubscription(subscriptionExists);
+                //_SubscripitionRep.SaveSubscription();
+                _unitOfWork.SubscriptionRep.UpdateSubscription(subscriptionExists);
+                _unitOfWork.Save();
             }
             catch (SqlException ex)
             {
@@ -111,13 +119,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var subscripitonExists = _SubscripitionRep.GetSubscriptionById(subscriptionId);
-                if(subscripitonExists == null)
+                //var subscripitonExists = _SubscripitionRep.GetSubscriptionById(subscriptionId);
+                var subscripitonExists = _unitOfWork.SubscriptionRep.GetSubscriptionById(subscriptionId);
+                if (subscripitonExists == null)
                 {
                     throw new Exception("Subscription is not exists with this id:" + subscriptionId);
                 }
-                _SubscripitionRep.DeleteSubscription(subscripitonExists.SubscriptionId);
-                _SubscripitionRep.SaveSubscription();
+                //_SubscripitionRep.DeleteSubscription(subscripitonExists.SubscriptionId);
+                //_SubscripitionRep.SaveSubscription();
+                _unitOfWork.SubscriptionRep.DeleteSubscription(subscripitonExists.SubscriptionId);
+                _unitOfWork.Save();
             }
             catch (SqlException ex)
             {

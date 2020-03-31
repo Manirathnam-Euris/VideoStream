@@ -10,11 +10,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 {
     public class SavedMediaManager
     {
-        private SavedMediaRepository _SavedMediaRep = new SavedMediaRepository();
-
+        //private SavedMediaRepository _SavedMediaRep = new SavedMediaRepository();
+        UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
         public IEnumerable<SavedMedia> GetAllSavedMedia()
         {
-            return _SavedMediaRep.GetAllSavedMedia().ToList();
+            return _unitOfWork.SavedRep.GetAllSavedMedia().ToList();
         }
 
         public SavedMedia GetSavedMedia(Guid savedMediaId)
@@ -25,8 +25,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var savedMediaExists = _SavedMediaRep.GetSavedMediaById(savedMediaId);
-                if(savedMediaExists == null)
+                //var savedMediaExists = _SavedMediaRep.GetSavedMediaById(savedMediaId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetSavedMediaById(savedMediaId);
+                if (savedMediaExists == null)
                 {
                     throw new Exception("Saved media is not present with this Id:" + savedMediaId);
                 }
@@ -46,8 +47,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var savedMediaExists = _SavedMediaRep.GetAllSavedMedia().Where(s => s.UserProfileId == profileId);
-                if(savedMediaExists == null)
+                //var savedMediaExists = _SavedMediaRep.GetAllSavedMedia().Where(s => s.UserProfileId == profileId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetAllSavedMedia().Where(s => s.UserProfileId == profileId);
+                if (savedMediaExists == null)
                 {
                     throw new Exception("No data found with this profile Id:" + profileId);
                 }
@@ -63,13 +65,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var savedMediaExists = _SavedMediaRep.GetSavedMediaById(savedMedia.SavedMediaId);
-                if(savedMediaExists != null)
+                //var savedMediaExists = _SavedMediaRep.GetSavedMediaById(savedMedia.SavedMediaId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetSavedMediaById(savedMedia.SavedMediaId);
+                if (savedMediaExists != null)
                 {
                     throw new Exception("This savedMedia is already exists Id:" + savedMedia.SavedMediaId);
                 }
-                _SavedMediaRep.InsertMedia(savedMedia);
-                _SavedMediaRep.SaveToSavedMedia();
+                //_SavedMediaRep.InsertMedia(savedMedia);
+                //_SavedMediaRep.SaveToSavedMedia();
+                _unitOfWork.SavedRep.InsertMedia(savedMedia);
+                _unitOfWork.Save();
             }
             catch(SqlException ex)
             {
@@ -81,8 +86,9 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var savedMediaExists = _SavedMediaRep.GetSavedMediaById(savedMedia.SavedMediaId);
-                if(savedMediaExists == null)
+                //var savedMediaExists = _SavedMediaRep.GetSavedMediaById(savedMedia.SavedMediaId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetSavedMediaById(savedMedia.SavedMediaId);
+                if (savedMediaExists == null)
                 {
                     throw new Exception("There is no saved media to update with this Id: " + savedMedia.SavedMediaId);
                 }
@@ -90,8 +96,10 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 savedMediaExists.UserProfileId = savedMedia.UserProfileId;
                 savedMediaExists.ContentId = savedMedia.ContentId;
 
-                _SavedMediaRep.UpdateSavedMedia(savedMediaExists);
-                _SavedMediaRep.SaveToSavedMedia();
+                //_SavedMediaRep.UpdateSavedMedia(savedMediaExists);
+                //_SavedMediaRep.SaveToSavedMedia();
+                _unitOfWork.SavedRep.UpdateSavedMedia(savedMediaExists);
+                _unitOfWork.Save();
             }
             catch(SqlException ex)
             {
@@ -107,7 +115,8 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Please provide valid contentId");
                 }
-                var savedMediaExists = _SavedMediaRep.GetAllSavedMedia().Where(s => s.ContentId == contentId);
+                //var savedMediaExists = _SavedMediaRep.GetAllSavedMedia().Where(s => s.ContentId == contentId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetAllSavedMedia().Where(s => s.ContentId == contentId);
                 if (savedMediaExists == null)
                 {
                     throw new Exception("No data found with this profile Id:" + contentId);
@@ -128,13 +137,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var savedMediaExists = _SavedMediaRep.GetSavedMediaById(savedMediaId);
-                if(savedMediaExists == null)
+                //var savedMediaExists = _SavedMediaRep.GetSavedMediaById(savedMediaId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetSavedMediaById(savedMediaId);
+                if (savedMediaExists == null)
                 {
                     throw new Exception("There is no saved media with this Id:" + savedMediaId);
                 }
-                _SavedMediaRep.DeleteSavedMedia(savedMediaExists.SavedMediaId);
-                _SavedMediaRep.SaveToSavedMedia();
+                //_SavedMediaRep.DeleteSavedMedia(savedMediaExists.SavedMediaId);
+                //_SavedMediaRep.SaveToSavedMedia();
+                _unitOfWork.SavedRep.DeleteSavedMedia(savedMediaExists.SavedMediaId);
+                _unitOfWork.Save();
             }
             catch(SqlException ex)
             {

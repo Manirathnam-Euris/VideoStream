@@ -10,10 +10,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 {
     public class UserAccountManager
     {
-        private UserAccountRepository _UserAccountRep = new UserAccountRepository();
+        //private UserAccountRepository _UserAccountRep = new UserAccountRepository();
+        UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
         public IEnumerable<UserAccount> GetAllUserAccounts()
         {
-            var users = _UserAccountRep.GetAllUserAccounts();
+            //var users = _UserAccountRep.GetAllUserAccounts();
+            var users = _unitOfWork.UserAccountRep.GetAllUserAccounts();
             var userList = new List<UserAccount>();
 
             foreach (var user in users)
@@ -31,7 +33,8 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var userExists = _UserAccountRep.GetUserAccountById(userId);
+                //var userExists = _UserAccountRep.GetUserAccountById(userId);
+                var userExists = _unitOfWork.UserAccountRep.GetUserAccountById(userId);
                 if(userExists == null)
                 {
                     throw new Exception("User not Exists with this :" + userId);
@@ -47,13 +50,17 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var userExists = _UserAccountRep.GetUserAccountById(user.UserId);
-                if(userExists != null)
+                
+                //var userExists = _UserAccountRep.GetUserAccountById(user.UserId);
+                var userExists = _unitOfWork.UserAccountRep.GetUserAccountById(user.UserId);
+                if (userExists != null)
                 {
                     throw new Exception("User Already exists");
                 }
-                _UserAccountRep.InsertUserAccount(user);
-                _UserAccountRep.SaveUserAccount();
+                _unitOfWork.UserAccountRep.InsertUserAccount(user);
+                //_UserAccountRep.InsertUserAccount(user);
+                //_UserAccountRep.SaveUserAccount();
+                _unitOfWork.Save();
             }
             catch(SqlException ex)
             {
@@ -65,7 +72,8 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var userExists = _UserAccountRep.GetUserAccountById(user.UserId);
+                //var userExists = _UserAccountRep.GetUserAccountById(user.UserId);
+                var userExists = _unitOfWork.UserAccountRep.GetUserAccountById(user.UserId);
                 if(userExists == null)
                 {
                     throw new Exception("User not exists please create user");
@@ -78,8 +86,10 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 userExists.SurName = user.SurName;
                 userExists.Name = user.Name;
 
-                _UserAccountRep.UpdateUserAccount(userExists);
-                _UserAccountRep.SaveUserAccount();
+                //_UserAccountRep.UpdateUserAccount(userExists);
+                //_UserAccountRep.SaveUserAccount();
+                _unitOfWork.UserAccountRep.UpdateUserAccount(userExists);
+                _unitOfWork.Save();
             }
             catch(SqlException ex)
             {
@@ -95,13 +105,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var user = _UserAccountRep.GetUserAccountById(userId);
+                //var user = _UserAccountRep.GetUserAccountById(userId);
+                var user = _unitOfWork.UserAccountRep.GetUserAccountById(userId);
                 if(user == null)
                 {
                     throw new Exception("User not found with this Id");
                 }
-                _UserAccountRep.DeleteUserAccount(user.UserId);
-                _UserAccountRep.SaveUserAccount();
+                //_UserAccountRep.DeleteUserAccount(user.UserId);
+                //_UserAccountRep.SaveUserAccount();
+                _unitOfWork.UserAccountRep.DeleteUserAccount(user.UserId);
+                _unitOfWork.Save();
                 return true;
             }
             catch(SqlException ex)
@@ -112,7 +125,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 
         internal UserAccount MapUserAccount(UserAccount user)
         {
-            var _userProfileRep = new UserProfileRepository();
+            var _userProfileRep = new UserProfileRepository(new VideoStreamContext());
 
             return new UserAccount()
             {

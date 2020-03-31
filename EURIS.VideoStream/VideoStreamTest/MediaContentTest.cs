@@ -15,19 +15,19 @@ namespace VideoStreamTest
         public void AddMediaContent()
         {
             _mediaContent.ContentId = Guid.NewGuid();
-            _mediaContent.Title = "Interstellar";
+            _mediaContent.Title = "Robo";
             _mediaContent.Episode = 0;
             _mediaContent.Genre = "Sci-Fi";
             _mediaContent.TimeLength = 120;
-            _mediaContent.ReleaseDate = new DateTime(2014,10,14);
-            _mediaContent.Distributor = "United States";
-            _mediaContent.Language = "English";
+            _mediaContent.ReleaseDate = new DateTime(2014,10,11);
+            _mediaContent.Distributor = "LycaProductions";
+            _mediaContent.Language = "Telugu";
             _mediaContent.AverageRating = 8;
-            _mediaContent.HeroName = "Matthew";
-            _mediaContent.HeroineName = "Anne";
-            _mediaContent.Director = "Cristopher nolan";
-            _mediaContent.Producer = "Nolan";
-            _mediaContent.ProductionHouse = "Warner Bros";
+            _mediaContent.HeroName = "Rajini";
+            _mediaContent.HeroineName = "Aishwarya";
+            _mediaContent.Director = "Shankar";
+            _mediaContent.Producer = "Subaskaran";
+            _mediaContent.ProductionHouse = "Lyca Production";
             _mediaContentManager.AddMediaContent(_mediaContent);
         }
 

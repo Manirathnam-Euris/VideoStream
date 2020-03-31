@@ -9,14 +9,14 @@ using EURIS.VideoStream.Interfaces;
 
 namespace EURIS.VideoStream.Core
 {
-    class SubscripitionRepository : ISubscription
+    public class SubscripitionRepository : ISubscription
     {
         private VideoStreamContext db;
         private DbSet<Subscription> dbSet;
 
-        public SubscripitionRepository()
+        public SubscripitionRepository(VideoStreamContext _videoStreamContext)
         {
-            db = new VideoStreamContext();
+            db = _videoStreamContext;
             dbSet = db.Set<Subscription>();
         }
 
