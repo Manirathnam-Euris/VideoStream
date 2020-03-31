@@ -10,7 +10,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 {
     public class SubscriptionTypeManager
     {
-        //private SubscriptionTypeRepository _SubscriptionTypeRep = new SubscriptionTypeRepository();
         UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
 
         public IEnumerable<SubscriptionType> GetAllSubscriptionTypes()
@@ -26,7 +25,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                //var subscriptionTypeExists = _SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionTypeId);
                 var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionTypeId);
                 if (subscriptionTypeExists == null)
                 {
@@ -48,7 +46,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                //var subscripitionTypeExists = _SubscriptionTypeRep.GetAllSubscripitonTypes().Where(s => s.SubscriptionId == subscriptionId);
                 var subscripitionTypeExists = _unitOfWork.SubscriptionTypeRep.GetAllSubscripitonTypes().Where(s => s.SubscriptionId == subscriptionId);
                 if (subscripitionTypeExists == null)
                 {
@@ -66,7 +63,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                //var subscriptionTypeExists = _SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionType.SubscriptionTypeId);
                 var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionType.SubscriptionTypeId);
                 if (subscriptionTypeExists == null)
                 {
@@ -76,8 +72,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 subscriptionTypeExists.Type = subscriptionType.Type;
                 subscriptionTypeExists.SubscriptionId = subscriptionType.SubscriptionId;
 
-                //_SubscriptionTypeRep.InsertSubscripitonType(subscriptionTypeExists);
-                //_SubscriptionTypeRep.SaveSubscriptionType();
                 _unitOfWork.SubscriptionTypeRep.InsertSubscripitonType(subscriptionTypeExists);
                 _unitOfWork.Save();
             }
@@ -91,14 +85,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                //var subscriptionTypeExists = _SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionType.SubscriptionTypeId);
                 var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionType.SubscriptionTypeId);
                 if (subscriptionTypeExists != null)
                 {
                     throw new Exception("This Subscripition type is already exists with Id: " + subscriptionType.SubscriptionTypeId);
                 }
-                //_SubscriptionTypeRep.InsertSubscripitonType(subscriptionType);
-                //_SubscriptionTypeRep.SaveSubscriptionType();
                 _unitOfWork.SubscriptionTypeRep.InsertSubscripitonType(subscriptionType);
                 _unitOfWork.Save();
             }
@@ -116,14 +107,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                //var subscriptionTypeExists = _SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionTypeId);
                 var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionTypeId);
                 if (subscriptionTypeExists == null)
                 {
                 throw new Exception("Subscription type is not present with the Id:" + subscriptionTypeId);
                 }
-                //_SubscriptionTypeRep.DeleteSubscriptionType(subscriptionTypeExists.SubscriptionTypeId);
-                //_SubscriptionTypeRep.SaveSubscriptionType();
                 _unitOfWork.SubscriptionTypeRep.DeleteSubscriptionType(subscriptionTypeExists.SubscriptionTypeId);
                 _unitOfWork.Save();
             }

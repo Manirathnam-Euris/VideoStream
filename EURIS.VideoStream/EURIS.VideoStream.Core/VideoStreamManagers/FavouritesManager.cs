@@ -10,7 +10,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 {
     public class FavouritesManager
     {
-        //private FavouritesRepository _FavouritesRep = new FavouritesRepository();
         UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
 
         public IEnumerable<Favourites> GetAllFavourites()
@@ -26,7 +25,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                //var favoriteExists = _FavouritesRep.GetFavouriteById(favouriteId);
                 var favoriteExists = _unitOfWork.FavRep.GetFavouriteById(favouriteId);
                 if (favoriteExists == null)
                 {
@@ -48,7 +46,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                //var favouritesExists = _FavouritesRep.GetAllFavourites().Where(s => s.UserProfileId == profileId);
                 var favouritesExists = _unitOfWork.FavRep.GetAllFavourites().Where(s => s.UserProfileId == profileId);
                 if (favouritesExists == null)
                 {
@@ -70,7 +67,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                //var favouritesExists = _FavouritesRep.GetAllFavourites().Where(s => s.ContentId == contentId);
                 var favouritesExists = _unitOfWork.FavRep.GetAllFavourites().Where(s => s.ContentId == contentId);
                 if (favouritesExists == null)
                 {
@@ -88,7 +84,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                //var favouriteExists = _FavouritesRep.GetFavouriteById(favourites.FavouritesId);
                 var favouriteExists = _unitOfWork.FavRep.GetFavouriteById(favourites.FavouritesId);
                 if (favouriteExists == null)
                 {
@@ -97,9 +92,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 favouriteExists.Name = favourites.Name;
                 favourites.UserProfileId = favourites.UserProfileId;
                 favourites.ContentId = favourites.ContentId;
-
-                //_FavouritesRep.UpdateFavourite(favouriteExists);
-                //_FavouritesRep.SaveFavourite();
+                
                 _unitOfWork.FavRep.UpdateFavourite(favouriteExists);
                 _unitOfWork.Save();
             }
@@ -113,14 +106,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                //var favouriteExists = _FavouritesRep.GetFavouriteById(favourites.FavouritesId);
                 var favouriteExists = _unitOfWork.FavRep.GetFavouriteById(favourites.FavouritesId);
                 if (favouriteExists != null)
                 {
                     throw new Exception("This favourites is already exists with Id:" + favourites.FavouritesId);
                 }
-                //_FavouritesRep.InsertFavourite(favourites);
-                //_FavouritesRep.SaveFavourite();
                 _unitOfWork.FavRep.InsertFavourite(favourites);
                 _unitOfWork.Save();
             }
@@ -134,14 +124,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                //var favouriteExists = _FavouritesRep.GetFavouriteById(favouriteId);
                 var favouriteExists = _unitOfWork.FavRep.GetFavouriteById(favouriteId);
                 if (favouriteExists == null)
                 {
                     throw new Exception("No favourites are found with the Id:" + favouriteId);
                 }
-                //_FavouritesRep.DeleteFavourite(favouriteExists.FavouritesId);
-                //_FavouritesRep.SaveFavourite();
                 _unitOfWork.FavRep.DeleteFavourite(favouriteExists.FavouritesId);
                 _unitOfWork.Save();
             }

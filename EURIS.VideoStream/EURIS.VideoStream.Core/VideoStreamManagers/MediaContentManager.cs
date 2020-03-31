@@ -10,8 +10,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 {
     public class MediaContentManager
     {
-        //private MediaContentRepository _MediaContentRep = new MediaContentRepository();
-
         UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
 
         public IEnumerable<MediaContent> GetAllMediaContents()
@@ -27,7 +25,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                //var mediaExists = _MediaContentRep.GetMediaContentById(contentId);
                 var mediaExists = _unitOfWork.MediaRep.GetMediaContentById(contentId);
                 if (mediaExists == null)
                 {
@@ -45,14 +42,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                //var mediaExists = _MediaContentRep.GetMediaContentById(mediaContent.ContentId);
                 var mediaExists = _unitOfWork.MediaRep.GetMediaContentById(mediaContent.ContentId);
                 if (mediaExists != null)
                 {
                     throw new Exception("This media is already exists");
                 }
-                //_MediaContentRep.InsertMediaContent(mediaContent);
-                //_MediaContentRep.SaveMediaContent();
                 _unitOfWork.MediaRep.InsertMediaContent(mediaContent);
                 _unitOfWork.Save();
             }
@@ -66,7 +60,6 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                //var mediaExists = _MediaContentRep.GetMediaContentById(mediaContent.ContentId);
                 var mediaExists = _unitOfWork.MediaRep.GetMediaContentById(mediaContent.ContentId);
                 if (mediaExists == null)
                 {
@@ -85,8 +78,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 mediaExists.Director = mediaContent.Director;
                 mediaExists.Producer = mediaContent.Producer;
                 mediaExists.ProductionHouse = mediaContent.ProductionHouse;
-                //_MediaContentRep.UpdateMediaContent(mediaExists);
-                //_MediaContentRep.SaveMediaContent();
+
                 _unitOfWork.MediaRep.UpdateMediaContent(mediaExists);
                 _unitOfWork.Save();
             }
@@ -104,14 +96,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                //var mediaExists = _MediaContentRep.GetMediaContentById(contentId);
                 var mediaExists = _unitOfWork.MediaRep.GetMediaContentById(contentId);
                 if (mediaExists == null)
                 {
                     throw new Exception("Media is not exists whith this id:" + contentId);
                 }
-                //_MediaContentRep.DeleteMediaContent(mediaExists.ContentId);
-                //_MediaContentRep.SaveMediaContent();
                 _unitOfWork.MediaRep.DeleteMediaContent(mediaExists.ContentId);
                 _unitOfWork.Save();
             }
