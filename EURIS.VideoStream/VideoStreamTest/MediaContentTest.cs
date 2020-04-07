@@ -34,7 +34,7 @@ namespace VideoStreamTest
         [TestMethod()]
         public void GetMediaContentByIdTest()
         {
-            _mediaContentManager.GetMediaContent(new Guid(""));
+            var mediaContent = _mediaContentManager.GetMediaContent(new Guid("04B4346F-D4F3-4CF0-96D8-31882845AF36"));
             Assert.IsTrue(true);
         }
 

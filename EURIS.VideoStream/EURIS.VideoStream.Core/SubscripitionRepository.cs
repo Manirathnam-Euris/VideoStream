@@ -19,7 +19,7 @@ namespace EURIS.VideoStream.Core
             db = _videoStreamContext;
             dbSet = db.Set<Subscription>();
         }
-
+        
         public IEnumerable<Subscription> GetAllSubscripitons()
         {
             return dbSet.ToList();
