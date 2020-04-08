@@ -9,7 +9,7 @@ using EURIS.VideoStream.Interfaces;
 
 namespace EURIS.VideoStream.Core
 {
-    public class SavedMediaRepository : ISavedMedia
+    public class SavedMediaRepository : IRepository<Media>
     {
         private VideoStreamContext db;
         private DbSet<SavedMedia> dbSet;

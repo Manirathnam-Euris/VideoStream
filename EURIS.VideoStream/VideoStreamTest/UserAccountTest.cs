@@ -28,10 +28,16 @@ namespace VideoStreamTest
         }
 
         [TestMethod]
-        public void GetUserByIdTest()
+        public void GetUserAccount_WhenCalled_CheckIfTheUserIsNotNull()
         {
-            var user =_accountManager.GetUserAccount(new Guid("CAECEFD5-0131-4912-BC42-CA5ADFBB96EE"));
-            Assert.IsTrue(true);
+            // Arrange
+            var accountGuid = new Guid("CAECEFD5-0131-4912-BC42-CA5ADFBB96EE");
+
+            // Act 
+            var user =_accountManager.GetUserAccount(accountGuid);
+
+            // Assert
+            Assert.IsNotNull(user);
         }
 
         [TestMethod]
