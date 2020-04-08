@@ -11,6 +11,7 @@ namespace EURIS.VideoStream.Core
 {
     public class SubscriptionTypeRepository : ISubscriptionType
     {
+        // Test comment
         private VideoStreamContext db;
         private DbSet<SubscriptionType> dbSet;
 
