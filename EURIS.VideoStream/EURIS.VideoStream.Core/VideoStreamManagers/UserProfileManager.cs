@@ -15,7 +15,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 
         public IEnumerable<UserProfile> GetAllUserProfiles()
         {
-            return _unitOfWork.UserProfileRep.GetAllUserProfiles().ToList();
+            return _unitOfWork.UserProfileRep.GetAll().ToList();
         }
 
         public IEnumerable<UserProfile> GetUserProfiles(Guid userId)
@@ -26,7 +26,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var userProfiles = _unitOfWork.UserProfileRep.GetAllUserProfiles().Where(u => u.UserId == userId);
+                var userProfiles = _unitOfWork.UserProfileRep.GetAll().Where(u => u.UserId == userId);
                 if(userProfiles == null)
                 {
                     throw new Exception("User Profiles are not present with this userId:" + userId);
@@ -47,7 +47,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide Valid Id");
                 }
-                var profile = _unitOfWork.UserProfileRep.GetUserProfileById(profileId);
+                var profile = _unitOfWork.UserProfileRep.GetById(profileId);
                 if(profile == null)
                 {
                     throw new Exception("No profile with the provided Id: " + profileId);
@@ -64,17 +64,17 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var profileExists = _unitOfWork.UserProfileRep.GetUserProfileById(userProfile.ProfileId);
+                var profileExists = _unitOfWork.UserProfileRep.GetById(userProfile.ProfileId);
                 if (profileExists != null)
                 {
                     throw new Exception("This Profile is already exists");
                 }
-                var profileCount = _unitOfWork.UserProfileRep.GetAllUserProfiles().Where(u => u.UserId == userProfile.UserId).Count();
+                var profileCount = _unitOfWork.UserProfileRep.GetAll().Where(u => u.UserId == userProfile.UserId).Count();
                 if (profileCount >= 5)
                 {
                     throw new Exception("Sorry max of 5 Profiles with this user is already exists");
                 }
-                _unitOfWork.UserProfileRep.InsertUserProfile(userProfile);
+                _unitOfWork.UserProfileRep.Insert(userProfile);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -87,7 +87,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var profileExists = _unitOfWork.UserProfileRep.GetUserProfileById(userProfile.ProfileId);
+                var profileExists = _unitOfWork.UserProfileRep.GetById(userProfile.ProfileId);
                 if (profileExists == null)
                 {
                     throw new Exception("This profile is not exists");
@@ -97,7 +97,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 profileExists.UserId = userProfile.UserId;
                 profileExists.SubscriptionTypeId = userProfile.SubscriptionTypeId;
 
-                _unitOfWork.UserProfileRep.UpdateUserProfile(profileExists);
+                _unitOfWork.UserProfileRep.Update(profileExists);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -114,12 +114,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var profileExists = _unitOfWork.UserProfileRep.GetUserProfileById(profileId);
+                var profileExists = _unitOfWork.UserProfileRep.GetById(profileId);
                 if (profileExists == null)
                 {
                     throw new Exception("This profile is not Exists for deletion");
                 }
-                _unitOfWork.UserProfileRep.DeleteUserProfile(profileExists.ProfileId);
+                _unitOfWork.UserProfileRep.Delete(profileExists.ProfileId);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -136,11 +136,11 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 ProfileName = userProfile.ProfileName,
                 UserId = userProfile.UserId,
                 SubscriptionTypeId = userProfile.SubscriptionTypeId,
-                SubscriptionType = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(userProfile.SubscriptionTypeId),
-                UserAccount = _unitOfWork.UserAccountRep.GetUserAccountById(userProfile.UserId),
-                StreamDatas = _unitOfWork.StreamRep.GetAllStreamData().Where(s => s.UserProfileId == userProfile.ProfileId).ToList(),
-                Favourites = _unitOfWork.FavRep.GetAllFavourites().Where(f => f.UserProfileId == userProfile.ProfileId).ToList(),
-                SavedMedias = _unitOfWork.SavedRep.GetAllSavedMedia().Where(s => s.UserProfileId == userProfile.UserId).ToList()
+                SubscriptionType = _unitOfWork.SubscriptionTypeRep.GetById(userProfile.SubscriptionTypeId),
+                UserAccount = _unitOfWork.UserAccountRep.GetById(userProfile.UserId),
+                StreamDatas = _unitOfWork.StreamRep.GetAll().Where(s => s.UserProfileId == userProfile.ProfileId).ToList(),
+                Favourites = _unitOfWork.FavRep.GetAll().Where(f => f.UserProfileId == userProfile.ProfileId).ToList(),
+                SavedMedias = _unitOfWork.SavedRep.GetAll().Where(s => s.UserProfileId == userProfile.UserId).ToList()
             };
             return modal;
         }

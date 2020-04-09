@@ -8,63 +8,94 @@ namespace VideoStreamTest
     [TestClass]
     public class StreamDataTest
     {
-        private StreamData _streamData = new StreamData();
+        //private StreamData _streamData = new StreamData();
         private StreamDataManager _streamDataManager = new StreamDataManager();
 
         [TestMethod]
-        public void AddStreamDataTest()
+        public void AddStreamData_WhenCalled_CheckItIsAdded()
         {
-            _streamData.StreamDataId = Guid.NewGuid();
-            _streamData.StreamDate = DateTime.Now;
-            _streamData.StreamTime = DateTime.Now;
-            _streamData.StreamLength = 100;
-            _streamData.StreamRate = "1080bits";
-            _streamData.UserProfileId = new Guid("922DB99E-572B-4BEA-91BB-1793F3CD6492");
-            _streamData.ContentId = new Guid("98C2A5E2-F413-4913-BB38-8BD834596713");
-            _streamDataManager.AddStreamData(_streamData);
+            var profileId = new Guid("922DB99E-572B-4BEA-91BB-1793F3CD6492");
+            var contentId = new Guid("98C2A5E2-F413-4913-BB38-8BD834596713");
+
+            var streamData = new StreamData()
+            {
+                StreamDataId = Guid.NewGuid(),
+                StreamDate = DateTime.Now,
+                StreamTime = DateTime.Now,
+                StreamLength = 100,
+                StreamRate = "1080bits",
+                UserProfileId = profileId,
+                ContentId = contentId
+            };
+           
+            _streamDataManager.AddStreamData(streamData);
         }
 
         [TestMethod()]
-        public void GetStreamByIdTest()
+        public void GetStreamById_WhenCalled_CheckStreamDataIsNotNull()
         {
-            _streamDataManager.GetStreamData(new Guid("76A9238F-530C-42FA-8088-03BA4809432B"));
+            var streamDataId = new Guid("76A9238F-530C-42FA-8088-03BA4809432B");
+
+            var streamData = _streamDataManager.GetStreamData(streamDataId);
+
+            Assert.IsNotNull(streamData);
         }
 
         [TestMethod()]
-        public void UpdateStreamDataTest()
+        public void UpdateStreamData_WhenCalled_CheckStreamDataIsUpdated()
         {
-            _streamData.StreamDataId = new Guid("CA2AF232-B909-4E19-8B4F-1BD8AA0079BA");
-            _streamData.StreamDate = DateTime.Now;
-            _streamData.StreamTime = DateTime.Now;
-            _streamData.StreamLength = 150;
-            _streamData.StreamRate = "1080bits";
-            _streamData.UserProfileId = new Guid("922DB99E-572B-4BEA-91BB-1793F3CD6492");
-            _streamData.ContentId = new Guid("98C2A5E2-F413-4913-BB38-8BD834596713");
-            _streamDataManager.UpdateStreamData(_streamData);
+            var streamDataId = new Guid("CA2AF232-B909-4E19-8B4F-1BD8AA0079BA");
+            var profileId = new Guid("922DB99E-572B-4BEA-91BB-1793F3CD6492");
+            var contentId = new Guid("98C2A5E2-F413-4913-BB38-8BD834596713");
+
+            var streamData = new StreamData()
+            {
+                StreamDataId = streamDataId,
+                StreamDate = DateTime.Now,
+                StreamTime = DateTime.Now,
+                StreamLength = 150,
+                StreamRate = "1080bits",
+                UserProfileId = profileId,
+                ContentId = contentId
+            };
+
+            _streamDataManager.UpdateStreamData(streamData);
         }
 
         [TestMethod()]
-        public void DeleteStreamDataTest()
+        public void DeleteStreamData_WhenCalled_CheckStreamDataIsDeleted()
         {
-            _streamDataManager.DeleteStreamData(new Guid("CA2AF232-B909-4E19-8B4F-1BD8AA0079BA"));
+            var streamDataId = new Guid("CA2AF232-B909-4E19-8B4F-1BD8AA0079BA");
+
+            _streamDataManager.DeleteStreamData(streamDataId);
         }
 
         [TestMethod()]
-        public void GetMediaStreamTest()
+        public void GetMediaStream_WhenCalled_CheckMediaStreamIsNotNull()
         {
-           var mediaStream = _streamDataManager.GetMediaContentStreamData(new Guid("98C2A5E2-F413-4913-BB38-8BD834596713"));
+            var contentId = new Guid("98C2A5E2-F413-4913-BB38-8BD834596713");
+
+            var mediaStream = _streamDataManager.GetMediaContentStreamData(contentId);
+
+            Assert.IsNotNull(mediaStream);
         }
 
         [TestMethod]
-        public void GetProfileStreamTest()
+        public void GetProfileStream_WhenCalled_CheckProfileStreamIsNotNull()
         {
-           var profileStream = _streamDataManager.GetUserStreamData(new Guid("922DB99E-572B-4BEA-91BB-1793F3CD6492"));
+            var profileId = new Guid("922DB99E-572B-4BEA-91BB-1793F3CD6492");
+
+            var profileStream = _streamDataManager.GetUserStreamData(profileId);
+
+            Assert.IsNotNull(profileStream);
         }
 
         [TestMethod()]
-        public void GetAllStreamData()
+        public void GetAllStreamData_WhenCalled_CheckStreamDataIsNotNull()
         {
-            _streamDataManager.GetAllStreamDatas();
+            var streamData = _streamDataManager.GetAllStreamDatas();
+
+            Assert.IsNotNull(streamData);
         }
     }
 }

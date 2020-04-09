@@ -9,7 +9,7 @@ using EURIS.VideoStream.Interfaces;
 
 namespace EURIS.VideoStream.Core
 {
-    public class SubscriptionTypeRepository : ISubscriptionType
+    public class SubscriptionTypeRepository : IRepository<SubscriptionType>
     {
         // Test comment
         private VideoStreamContext db;
@@ -21,27 +21,27 @@ namespace EURIS.VideoStream.Core
             dbSet = db.Set<SubscriptionType>();
         }
 
-        public IEnumerable<SubscriptionType> GetAllSubscripitonTypes()
+        public IEnumerable<SubscriptionType> GetAll()
         {
             return dbSet.ToList();
         }
 
-        public SubscriptionType GetSubscriptionTypeById(Guid SubscriptionTypeId)
+        public SubscriptionType GetById(Guid SubscriptionTypeId)
         {
             return dbSet.Find(SubscriptionTypeId);
         }
 
-        public void InsertSubscripitonType(SubscriptionType SubscriptionType)
+        public void Insert(SubscriptionType SubscriptionType)
         {
             dbSet.Add(SubscriptionType);
         }
 
-        public void UpdateSubscriptionType(SubscriptionType SubscriptionType)
+        public void Update(SubscriptionType SubscriptionType)
         {
             db.Entry(SubscriptionType).State = EntityState.Modified;
         }
 
-        public void DeleteSubscriptionType(Guid SubscriptionTypeId)
+        public void Delete(Guid SubscriptionTypeId)
         {
             SubscriptionType SData = dbSet.Find(SubscriptionTypeId);
             dbSet.Remove(SData);

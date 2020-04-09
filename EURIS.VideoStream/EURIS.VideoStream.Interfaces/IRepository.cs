@@ -6,12 +6,12 @@ namespace EURIS.VideoStream.Interfaces
 
     public interface IRepository<T>
     {
-        IEnumerable<T> GetAllFavourites();
-        T GetFavouriteById(Guid favouriteId);
-        void InsertFavourite(T enity);
-        void UpdateFavourite(T entity);
-        void DeleteFavourite(Guid favouriteId);
-        void SaveFavourite();
+        IEnumerable<T> GetAll();
+        T GetById(Guid id);
+        void Insert(T enity);
+        void Update(T entity);
+        void Delete(Guid id);
+        //void SaveFavourite();
     }
 
     //public interface IFavourites

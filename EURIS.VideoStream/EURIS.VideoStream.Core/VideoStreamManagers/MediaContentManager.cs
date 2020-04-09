@@ -14,7 +14,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 
         public IEnumerable<MediaContent> GetAllMediaContents()
         {
-            return _unitOfWork.MediaRep.GetAllMediaContents().ToList();
+            return _unitOfWork.MediaRep.GetAll().ToList();
         }
 
         public MediaContent GetMediaContent(Guid contentId)
@@ -25,7 +25,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var mediaExists = _unitOfWork.MediaRep.GetMediaContentById(contentId);
+                var mediaExists = _unitOfWork.MediaRep.GetById(contentId);
                 if (mediaExists == null)
                 {
                     throw new Exception("Media is not exists with this Id:" + contentId);
@@ -42,12 +42,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var mediaExists = _unitOfWork.MediaRep.GetMediaContentById(mediaContent.ContentId);
+                var mediaExists = _unitOfWork.MediaRep.GetById(mediaContent.ContentId);
                 if (mediaExists != null)
                 {
                     throw new Exception("This media is already exists");
                 }
-                _unitOfWork.MediaRep.InsertMediaContent(mediaContent);
+                _unitOfWork.MediaRep.Insert(mediaContent);
                 _unitOfWork.Save();
             }
             catch (SqlException ex)
@@ -60,7 +60,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var mediaExists = _unitOfWork.MediaRep.GetMediaContentById(mediaContent.ContentId);
+                var mediaExists = _unitOfWork.MediaRep.GetById(mediaContent.ContentId);
                 if (mediaExists == null)
                 {
                     throw new Exception("Media is not exists to update");
@@ -79,7 +79,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 mediaExists.Producer = mediaContent.Producer;
                 mediaExists.ProductionHouse = mediaContent.ProductionHouse;
 
-                _unitOfWork.MediaRep.UpdateMediaContent(mediaExists);
+                _unitOfWork.MediaRep.Update(mediaExists);
                 _unitOfWork.Save();
             }
             catch (SqlException ex)
@@ -96,12 +96,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var mediaExists = _unitOfWork.MediaRep.GetMediaContentById(contentId);
+                var mediaExists = _unitOfWork.MediaRep.GetById(contentId);
                 if (mediaExists == null)
                 {
                     throw new Exception("Media is not exists whith this id:" + contentId);
                 }
-                _unitOfWork.MediaRep.DeleteMediaContent(mediaExists.ContentId);
+                _unitOfWork.MediaRep.Delete(mediaExists.ContentId);
                 _unitOfWork.Save();
             }
             catch (SqlException ex)

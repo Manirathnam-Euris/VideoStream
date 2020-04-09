@@ -9,7 +9,7 @@ using EURIS.VideoStream.Interfaces;
 
 namespace EURIS.VideoStream.Core
 {
-    public class FavouritesRepository : IFavourites
+    public class FavouritesRepository : IRepository<Favourites>
     {
         private VideoStreamContext db;
         private DbSet<Favourites> dbSet;
@@ -20,27 +20,27 @@ namespace EURIS.VideoStream.Core
             dbSet = db.Set<Favourites>();
         }
 
-        public IEnumerable<Favourites> GetAllFavourites()
+        public IEnumerable<Favourites> GetAll()
         {
             return dbSet.ToList();
         }
 
-        public Favourites GetFavouriteById(Guid FavouriteId)
+        public Favourites GetById(Guid FavouriteId)
         {
             return dbSet.Find(FavouriteId);
         }
 
-        public void InsertFavourite(Favourites FavouriteMedia)
+        public void Insert(Favourites FavouriteMedia)
         {
             dbSet.Add(FavouriteMedia);
         }
 
-        public void UpdateFavourite(Favourites FavouriteMedia)
+        public void Update(Favourites FavouriteMedia)
         {
             db.Entry(FavouriteMedia).State = EntityState.Modified;
         }
 
-        public void DeleteFavourite(Guid FavouriteId)
+        public void Delete(Guid FavouriteId)
         {
             Favourites FMedia = dbSet.Find(FavouriteId);
             dbSet.Remove(FMedia);

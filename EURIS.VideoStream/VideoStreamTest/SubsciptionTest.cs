@@ -13,18 +13,49 @@ namespace VideoStreamTest
     [TestClass]
     public class SubsciptionTest
     {
-        private Subscription _subscription = new Subscription();
+        //private Subscription _subscription = new Subscription();
         private SubscriptionManager _subManager = new SubscriptionManager();
 
         [TestMethod]
         public void SubscriptionAddTest()
         {
-            _subscription.SubscriptionId = Guid.NewGuid();
-            _subscription.StartDate = DateTime.Now;
-            _subscription.EndDate = DateTime.Now.AddDays(90);
-            _subscription.Price = 1000;
+            var subscription = new Subscription()
+            {
+                SubscriptionId = Guid.NewGuid(),
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(90),
+                Price = 1000
+            };
 
-            _subManager.AddSubscription(_subscription);
+            _subManager.AddSubscription(subscription);
+        }
+
+        [TestMethod]
+        public void SubscriptionUpdate_WhenCalled_CheckUpdateIsDone()
+        {
+            var subscriptionId = new Guid("64241D09-E2B0-4D78-99E2-689073B50011");
+            var subscription = new Subscription()
+            {
+                SubscriptionId = subscriptionId,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(90),
+                Price = 1000
+            };
+            _subManager.UpdateSubscription(subscription);
+        }
+
+        [TestMethod]
+        public void GetAllSubscriptions_WhenCalled_CheckSubscriptionIsNotNull()
+        {
+            var subscriptions = _subManager.GetAllSubscriptions();
+            Assert.IsNotNull(subscriptions);
+        }
+
+        [TestMethod]
+        public void SuscriptionDelete_WhenCalled_CheckSubscriptionIsDeleted()
+        {
+            var subscriptionId = new Guid("64241D09-E2B0-4D78-99E2-689073B50011");
+            _subManager.DeleteSubscription(subscriptionId);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EURIS.VideoStream.Core
 {
-    public class UserAccountRepository : IUserAccount
+    public class UserAccountRepository : IRepository<UserAccount>
     {
         private VideoStreamContext db;
         private DbSet<UserAccount> dbSet;
@@ -20,27 +20,27 @@ namespace EURIS.VideoStream.Core
             dbSet = db.Set<UserAccount>();
         }
 
-        public IEnumerable<UserAccount> GetAllUserAccounts()
+        public IEnumerable<UserAccount> GetAll()
         {
             return dbSet.ToList();
         }
 
-        public UserAccount GetUserAccountById(Guid UserId)
+        public UserAccount GetById(Guid UserId)
         {
             return dbSet.Find(UserId);
         }
 
-        public void InsertUserAccount(UserAccount User)
+        public void Insert(UserAccount User)
         {
             dbSet.Add(User);
         }
 
-        public void UpdateUserAccount(UserAccount User)
+        public void Update(UserAccount User)
         {
             db.Entry(User).State = EntityState.Modified;
         }
 
-        public void DeleteUserAccount(Guid UserId)
+        public void Delete(Guid UserId)
         {
             UserAccount User = dbSet.Find(UserId);
             dbSet.Remove(User);

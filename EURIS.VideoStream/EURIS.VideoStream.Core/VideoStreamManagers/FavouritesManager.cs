@@ -14,7 +14,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 
         public IEnumerable<Favourites> GetAllFavourites()
         {
-            return _unitOfWork.FavRep.GetAllFavourites().ToList();
+            return _unitOfWork.FavRep.GetAll().ToList();
         }
 
         public Favourites GetFavourites(Guid favouriteId)
@@ -25,7 +25,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var favoriteExists = _unitOfWork.FavRep.GetFavouriteById(favouriteId);
+                var favoriteExists = _unitOfWork.FavRep.GetById(favouriteId);
                 if (favoriteExists == null)
                 {
                     throw new Exception("Favourites are not present in data with the Id:" + favouriteId);
@@ -46,7 +46,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var favouritesExists = _unitOfWork.FavRep.GetAllFavourites().Where(s => s.UserProfileId == profileId);
+                var favouritesExists = _unitOfWork.FavRep.GetAll().Where(s => s.UserProfileId == profileId);
                 if (favouritesExists == null)
                 {
                     throw new Exception("No data found with this profile Id:" + profileId);
@@ -67,7 +67,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var favouritesExists = _unitOfWork.FavRep.GetAllFavourites().Where(s => s.ContentId == contentId);
+                var favouritesExists = _unitOfWork.FavRep.GetAll().Where(s => s.ContentId == contentId);
                 if (favouritesExists == null)
                 {
                     throw new Exception("No data found with this profile Id:" + contentId);
@@ -84,7 +84,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var favouriteExists = _unitOfWork.FavRep.GetFavouriteById(favourites.FavouritesId);
+                var favouriteExists = _unitOfWork.FavRep.GetById(favourites.FavouritesId);
                 if (favouriteExists == null)
                 {
                     throw new Exception("There is no favorites with the favourite id: " + favourites.FavouritesId);
@@ -93,7 +93,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 favourites.UserProfileId = favourites.UserProfileId;
                 favourites.ContentId = favourites.ContentId;
                 
-                _unitOfWork.FavRep.UpdateFavourite(favouriteExists);
+                _unitOfWork.FavRep.Update(favouriteExists);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -106,12 +106,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var favouriteExists = _unitOfWork.FavRep.GetFavouriteById(favourites.FavouritesId);
+                var favouriteExists = _unitOfWork.FavRep.GetById(favourites.FavouritesId);
                 if (favouriteExists != null)
                 {
                     throw new Exception("This favourites is already exists with Id:" + favourites.FavouritesId);
                 }
-                _unitOfWork.FavRep.InsertFavourite(favourites);
+                _unitOfWork.FavRep.Insert(favourites);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -124,12 +124,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var favouriteExists = _unitOfWork.FavRep.GetFavouriteById(favouriteId);
+                var favouriteExists = _unitOfWork.FavRep.GetById(favouriteId);
                 if (favouriteExists == null)
                 {
                     throw new Exception("No favourites are found with the Id:" + favouriteId);
                 }
-                _unitOfWork.FavRep.DeleteFavourite(favouriteExists.FavouritesId);
+                _unitOfWork.FavRep.Delete(favouriteExists.FavouritesId);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)

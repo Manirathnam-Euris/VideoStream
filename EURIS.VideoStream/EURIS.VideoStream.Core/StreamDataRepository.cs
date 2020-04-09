@@ -9,7 +9,7 @@ using EURIS.VideoStream.Interfaces;
 
 namespace EURIS.VideoStream.Core
 {
-    public class StreamDataRepository : IStreamData
+    public class StreamDataRepository : IRepository<StreamData>
     {
         private VideoStreamContext db;
         private DbSet<StreamData> dbSet;
@@ -20,27 +20,27 @@ namespace EURIS.VideoStream.Core
             dbSet = db.Set<StreamData>();
         }
 
-        public IEnumerable<StreamData> GetAllStreamData()
+        public IEnumerable<StreamData> GetAll()
         {
             return dbSet.ToList();
         }
 
-        public StreamData GetStreamDataById(Guid StreamId)
+        public StreamData GetById(Guid StreamId)
         {
             return dbSet.Find(StreamId);
         }
 
-        public void InsertStreamData(StreamData StreamData)
+        public void Insert(StreamData StreamData)
         {
             dbSet.Add(StreamData);
         }
 
-        public void UpdateStreamData(StreamData StreamData)
+        public void Update(StreamData StreamData)
         {
             db.Entry(StreamData).State = EntityState.Modified;
         }
 
-        public void DeleteStreamData(Guid StreamId)
+        public void Delete(Guid StreamId)
         {
             StreamData SData = dbSet.Find(StreamId);
             dbSet.Remove(SData);

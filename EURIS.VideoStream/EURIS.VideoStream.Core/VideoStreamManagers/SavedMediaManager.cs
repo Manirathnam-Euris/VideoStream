@@ -13,7 +13,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
         public IEnumerable<SavedMedia> GetAllSavedMedia()
         {
-            return _unitOfWork.SavedRep.GetAllSavedMedia().ToList();
+            return _unitOfWork.SavedRep.GetAll().ToList();
         }
 
         public SavedMedia GetSavedMedia(Guid savedMediaId)
@@ -24,7 +24,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var savedMediaExists = _unitOfWork.SavedRep.GetSavedMediaById(savedMediaId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetById(savedMediaId);
                 if (savedMediaExists == null)
                 {
                     throw new Exception("Saved media is not present with this Id:" + savedMediaId);
@@ -45,7 +45,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var savedMediaExists = _unitOfWork.SavedRep.GetAllSavedMedia().Where(s => s.UserProfileId == profileId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetAll().Where(s => s.UserProfileId == profileId);
                 if (savedMediaExists == null)
                 {
                     throw new Exception("No data found with this profile Id:" + profileId);
@@ -62,12 +62,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var savedMediaExists = _unitOfWork.SavedRep.GetSavedMediaById(savedMedia.SavedMediaId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetById(savedMedia.SavedMediaId);
                 if (savedMediaExists != null)
                 {
                     throw new Exception("This savedMedia is already exists Id:" + savedMedia.SavedMediaId);
                 }
-                _unitOfWork.SavedRep.InsertMedia(savedMedia);
+                _unitOfWork.SavedRep.Insert(savedMedia);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -80,7 +80,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var savedMediaExists = _unitOfWork.SavedRep.GetSavedMediaById(savedMedia.SavedMediaId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetById(savedMedia.SavedMediaId);
                 if (savedMediaExists == null)
                 {
                     throw new Exception("There is no saved media to update with this Id: " + savedMedia.SavedMediaId);
@@ -89,7 +89,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 savedMediaExists.UserProfileId = savedMedia.UserProfileId;
                 savedMediaExists.ContentId = savedMedia.ContentId;
 
-                _unitOfWork.SavedRep.UpdateSavedMedia(savedMediaExists);
+                _unitOfWork.SavedRep.Update(savedMediaExists);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -106,7 +106,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Please provide valid contentId");
                 }
-                var savedMediaExists = _unitOfWork.SavedRep.GetAllSavedMedia().Where(s => s.ContentId == contentId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetAll().Where(s => s.ContentId == contentId);
                 if (savedMediaExists == null)
                 {
                     throw new Exception("No data found with this profile Id:" + contentId);
@@ -127,12 +127,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var savedMediaExists = _unitOfWork.SavedRep.GetSavedMediaById(savedMediaId);
+                var savedMediaExists = _unitOfWork.SavedRep.GetById(savedMediaId);
                 if (savedMediaExists == null)
                 {
                     throw new Exception("There is no saved media with this Id:" + savedMediaId);
                 }
-                _unitOfWork.SavedRep.DeleteSavedMedia(savedMediaExists.SavedMediaId);
+                _unitOfWork.SavedRep.Delete(savedMediaExists.SavedMediaId);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)

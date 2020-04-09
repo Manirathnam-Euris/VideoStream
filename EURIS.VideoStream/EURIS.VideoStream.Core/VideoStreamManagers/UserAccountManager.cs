@@ -13,7 +13,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         UnitOfWork _unitOfWork = new UnitOfWork(new VideoStreamContext());
         public IEnumerable<UserAccount> GetAllUserAccounts()
         {
-            var users = _unitOfWork.UserAccountRep.GetAllUserAccounts();
+            var users = _unitOfWork.UserAccountRep.GetAll();
             var userList = new List<UserAccount>();
 
             foreach (var user in users)
@@ -31,7 +31,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var userExists = _unitOfWork.UserAccountRep.GetUserAccountById(userId);
+                var userExists = _unitOfWork.UserAccountRep.GetById(userId);
                 if(userExists == null)
                 {
                     throw new Exception("User not Exists with this :" + userId);
@@ -47,16 +47,16 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var userExists = _unitOfWork.UserAccountRep.GetUserAccountById(user.UserId);
+                var userExists = _unitOfWork.UserAccountRep.GetById(user.UserId);
                 if (userExists != null)
                 {
                     throw new Exception("User Already exists");
                 }
-                _unitOfWork.UserAccountRep.InsertUserAccount(user);
+                _unitOfWork.UserAccountRep.Insert(user);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
-            {
+            { 
                 throw new Exception(ex.Message);
             }
         }
@@ -65,7 +65,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var userExists = _unitOfWork.UserAccountRep.GetUserAccountById(user.UserId);
+                var userExists = _unitOfWork.UserAccountRep.GetById(user.UserId);
                 if(userExists == null)
                 {
                     throw new Exception("User not exists please create user");
@@ -78,7 +78,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 userExists.SurName = user.SurName;
                 userExists.Name = user.Name;
 
-                _unitOfWork.UserAccountRep.UpdateUserAccount(userExists);
+                _unitOfWork.UserAccountRep.Update(userExists);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -95,12 +95,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var user = _unitOfWork.UserAccountRep.GetUserAccountById(userId);
+                var user = _unitOfWork.UserAccountRep.GetById(userId);
                 if(user == null)
                 {
                     throw new Exception("User not found with this Id");
                 }
-                _unitOfWork.UserAccountRep.DeleteUserAccount(user.UserId);
+                _unitOfWork.UserAccountRep.Delete(user.UserId);
                 _unitOfWork.Save();
                 return true;
             }
@@ -125,7 +125,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 DateOfBirth = user.DateOfBirth,
                 CreditCardNumber = user.CreditCardNumber,
                 SubscriptionId = user.SubscriptionId,
-                UserProfiles = _userProfileRep.GetAllUserProfiles().Where(u => u.UserId == user.UserId).ToList()
+                UserProfiles = _userProfileRep.GetAll().Where(u => u.UserId == user.UserId).ToList()
             };
         }
     }

@@ -14,7 +14,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
 
         public IEnumerable<SubscriptionType> GetAllSubscriptionTypes()
         {
-            return _unitOfWork.SubscriptionTypeRep.GetAllSubscripitonTypes().ToList();
+            return _unitOfWork.SubscriptionTypeRep.GetAll().ToList();
         }
 
         public SubscriptionType GetSubscriptionType(Guid subscriptionTypeId)
@@ -25,7 +25,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionTypeId);
+                var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetById(subscriptionTypeId);
                 if (subscriptionTypeExists == null)
                 {
                     throw new Exception("Subscripiton type is not found with the Id:" + subscriptionTypeId);
@@ -46,7 +46,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var subscripitionTypeExists = _unitOfWork.SubscriptionTypeRep.GetAllSubscripitonTypes().Where(s => s.SubscriptionId == subscriptionId);
+                var subscripitionTypeExists = _unitOfWork.SubscriptionTypeRep.GetAll().Where(s => s.SubscriptionId == subscriptionId);
                 if (subscripitionTypeExists == null)
                 {
                     throw new Exception("Subscription types with ths subscription Id is not present :" + subscriptionId);
@@ -63,7 +63,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionType.SubscriptionTypeId);
+                var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetById(subscriptionType.SubscriptionTypeId);
                 if (subscriptionTypeExists == null)
                 {
                     throw new Exception("Subscription type is not found with this Id :" + subscriptionType.SubscriptionTypeId);
@@ -72,7 +72,7 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 subscriptionTypeExists.Type = subscriptionType.Type;
                 subscriptionTypeExists.SubscriptionId = subscriptionType.SubscriptionId;
 
-                _unitOfWork.SubscriptionTypeRep.InsertSubscripitonType(subscriptionTypeExists);
+                _unitOfWork.SubscriptionTypeRep.Insert(subscriptionTypeExists);
                 _unitOfWork.Save();
             }
             catch (SqlException ex)
@@ -85,12 +85,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
         {
             try
             {
-                var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionType.SubscriptionTypeId);
+                var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetById(subscriptionType.SubscriptionTypeId);
                 if (subscriptionTypeExists != null)
                 {
                     throw new Exception("This Subscripition type is already exists with Id: " + subscriptionType.SubscriptionTypeId);
                 }
-                _unitOfWork.SubscriptionTypeRep.InsertSubscripitonType(subscriptionType);
+                _unitOfWork.SubscriptionTypeRep.Insert(subscriptionType);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)
@@ -107,12 +107,12 @@ namespace EURIS.VideoStream.Core.VideoStreamManagers
                 {
                     throw new Exception("Provide valid Id");
                 }
-                var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetSubscriptionTypeById(subscriptionTypeId);
+                var subscriptionTypeExists = _unitOfWork.SubscriptionTypeRep.GetById(subscriptionTypeId);
                 if (subscriptionTypeExists == null)
                 {
                 throw new Exception("Subscription type is not present with the Id:" + subscriptionTypeId);
                 }
-                _unitOfWork.SubscriptionTypeRep.DeleteSubscriptionType(subscriptionTypeExists.SubscriptionTypeId);
+                _unitOfWork.SubscriptionTypeRep.Delete(subscriptionTypeExists.SubscriptionTypeId);
                 _unitOfWork.Save();
             }
             catch(SqlException ex)

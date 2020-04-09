@@ -9,7 +9,7 @@ using EURIS.VideoStream.Interfaces;
 
 namespace EURIS.VideoStream.Core
 {
-    public class UserProfileRepository : IUserProfile
+    public class UserProfileRepository : IRepository<UserProfile>
     {
         private VideoStreamContext db;
         private DbSet<UserProfile> dbSet;
@@ -20,27 +20,27 @@ namespace EURIS.VideoStream.Core
             dbSet = db.Set<UserProfile>();
         }
 
-        public IEnumerable<UserProfile> GetAllUserProfiles()
+        public IEnumerable<UserProfile> GetAll()
         {
             return dbSet.ToList();
         }
 
-        public UserProfile GetUserProfileById(Guid ProfileId)
+        public UserProfile GetById(Guid ProfileId)
         {
             return dbSet.Find(ProfileId);
         }
 
-        public void InsertUserProfile(UserProfile Uprofile)
+        public void Insert(UserProfile Uprofile)
         {
             dbSet.Add(Uprofile);
         }
 
-        public void UpdateUserProfile(UserProfile Userprofile)
+        public void Update(UserProfile Userprofile)
         {
             db.Entry(Userprofile).State = EntityState.Modified;
         }
 
-        public void DeleteUserProfile(Guid ProfileId)
+        public void Delete(Guid ProfileId)
         {
             UserProfile UProfile = dbSet.Find(ProfileId);
             dbSet.Remove(UProfile);

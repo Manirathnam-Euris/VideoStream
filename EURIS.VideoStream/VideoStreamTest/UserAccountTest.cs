@@ -8,23 +8,26 @@ namespace VideoStreamTest
     [TestClass]
     public class UserAccountTest
     {
-        private UserAccount _userAccount = new UserAccount();
+        // private UserAccount _userAccount = new UserAccount();
         private UserAccountManager _accountManager = new UserAccountManager();
 
         [TestMethod]
-        public void AddUserAccountTest()
+        public void AddUserAccount_ToAdd_CheckIfTheUserIsAdded()
         {
-            _userAccount.Address = "Antilla, mumbai, 22";
-            _userAccount.ContactNumber = unchecked((int)9397038055);
-            _userAccount.CreditCardNumber = "689409822335-5622-09";
-            _userAccount.Name = "With Unit";
-            _userAccount.SurName = "Unit work";
-            _userAccount.UserId = Guid.NewGuid();
-            _userAccount.SubscriptionId = new Guid("64241D09-E2B0-4D78-99E2-689073B50011");
-            _userAccount.Email = "unitwork@mail.com";
-            _userAccount.DateOfBirth = "01-01-1993";
-            _accountManager.AddUserAccount(_userAccount);
-            Assert.IsTrue(true);
+            var userId = Guid.NewGuid();
+            var userAccount = new UserAccount() {
+               Address = "Vijayawada, poranki, India",
+               ContactNumber = unchecked((int)9397038055),
+               CreditCardNumber = "799409822335-6622-90",
+               Name = "Saroja",
+               SurName = "Yesko",
+               UserId = userId,
+               SubscriptionId = new Guid("64241D09-E2B0-4D78-99E2-689073B50011"),
+               Email = "yeskosaroja@mail.com",
+               DateOfBirth = "01-01-1990"
+            };
+            
+            _accountManager.AddUserAccount(userAccount);
         }
 
         [TestMethod]
@@ -41,31 +44,39 @@ namespace VideoStreamTest
         }
 
         [TestMethod]
-        public void GetUserAccountTest()
+        public void GetAllUserAccounts_WhenCalled_CheckIfTheUsersAreNotNull()
         {
             var users = _accountManager.GetAllUserAccounts();
-            Assert.IsTrue(true);
+
+            Assert.IsNotNull(users);
         }
 
         [TestMethod]
-        public void UpdateUserAccountTest()
+        public void UpdateUserAccount_ToUpdate_CheckIfItIsUpdated()
         {
-            _userAccount.UserId = new Guid("2305115C-E4AA-4069-988B-E7606E5F4147");
-            _userAccount.Address = "Antilla, mumbai, 22";
-            _userAccount.ContactNumber = unchecked((int)9397038055);
-            _userAccount.CreditCardNumber = "689409822335-5622-09";
-            _userAccount.Name = "Testing";
-            _userAccount.SurName = "lyt mama";
-            _userAccount.SubscriptionId = new Guid("64241D09-E2B0-4D78-99E2-689073B50011");
-            _userAccount.Email = "letsee@mail.com";
-            _userAccount.DateOfBirth = "01-01-1994";
-            _accountManager.UpdateUserAccount(_userAccount);
+            var userId = new Guid("01B6020C-382B-4D44-8DA3-7513FB785C1F");
+
+            var userAccount = new UserAccount()
+            {
+                Address = "Royal palace, 94,Jaipur",
+                ContactNumber = unchecked((int)9397038055),
+                CreditCardNumber = "799409822335-6622-90",
+                Name = "Rani Padmavat",
+                SurName = "Rajput",
+                UserId = userId,
+                SubscriptionId = new Guid("64241D09-E2B0-4D78-99E2-689073B50011"),
+                Email = "mevadkings@mail.com",
+                DateOfBirth = "01-01-1990"
+            };
+            
+            _accountManager.UpdateUserAccount(userAccount);
         }
 
-        public void DeleteUserAccountTest()
+        [TestMethod]
+        public void DeleteUserAccount_WhenCalled_CheckIsDeleted()
         {
-            _accountManager.DeleteUserAccount(new Guid("2305115C-E4AA-4069-988B-E7606E5F4147"));
-            Assert.IsTrue(true);
+            var isDeleted = _accountManager.DeleteUserAccount(new Guid("01B6020C-382B-4D44-8DA3-7513FB785C1F"));
+            Assert.IsTrue(isDeleted);
         }
     }
 }

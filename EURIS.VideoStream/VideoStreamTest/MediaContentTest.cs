@@ -8,66 +8,79 @@ namespace VideoStreamTest
     [TestClass]
     public class MediaContentTest
     {
-        private MediaContent _mediaContent = new MediaContent();
+        //private MediaContent _mediaContent = new MediaContent();
         private MediaContentManager _mediaContentManager = new MediaContentManager();
 
         [TestMethod()]
-        public void AddMediaContent()
+        public void AddMediaContent_WhenCalled_CheckIfMediaContentIsAdded()
         {
-            _mediaContent.ContentId = Guid.NewGuid();
-            _mediaContent.Title = "Robo";
-            _mediaContent.Episode = 0;
-            _mediaContent.Genre = "Sci-Fi";
-            _mediaContent.TimeLength = 120;
-            _mediaContent.ReleaseDate = new DateTime(2014,10,11);
-            _mediaContent.Distributor = "LycaProductions";
-            _mediaContent.Language = "Telugu";
-            _mediaContent.AverageRating = 8;
-            _mediaContent.HeroName = "Rajini";
-            _mediaContent.HeroineName = "Aishwarya";
-            _mediaContent.Director = "Shankar";
-            _mediaContent.Producer = "Subaskaran";
-            _mediaContent.ProductionHouse = "Lyca Production";
-            _mediaContentManager.AddMediaContent(_mediaContent);
+            var mediaContent = new MediaContent()
+            {
+                ContentId = Guid.NewGuid(),
+                Title = "Robo",
+                Episode = 0,
+                Genre = "Sci-Fi",
+                TimeLength = 120,
+                ReleaseDate = new DateTime(2014, 10, 11),
+                Distributor = "LycaProductions",
+                Language = "Telugu",
+                AverageRating = 8,
+                HeroName = "Rajini",
+                HeroineName = "Aishwarya",
+                Director = "Shankar",
+                Producer = "Subaskaran",
+                ProductionHouse = "Lyca Production",
+            };
+            
+            _mediaContentManager.AddMediaContent(mediaContent);
         }
 
         [TestMethod()]
-        public void GetMediaContentByIdTest()
+        public void GetMediaContentById_WhenCalled_CheckMediaContentIsNotNull()
         {
-            var mediaContent = _mediaContentManager.GetMediaContent(new Guid("04B4346F-D4F3-4CF0-96D8-31882845AF36"));
-            Assert.IsTrue(true);
+            var mediaContentId = new Guid("04B4346F-D4F3-4CF0-96D8-31882845AF36");
+
+            var mediaContent = _mediaContentManager.GetMediaContent(mediaContentId);
+
+            Assert.IsNotNull(mediaContent);
         }
 
         [TestMethod()]
-        public void UpdateMediaContentTest()
+        public void UpdateMediaContent_WhenCalled_CheckMediaContentIsUpdated()
         {
-            _mediaContent.ContentId = new Guid("");
-            _mediaContent.Title = "Interstellar";
-            _mediaContent.Episode = 0;
-            _mediaContent.Genre = "Sci-Fi";
-            _mediaContent.TimeLength = 120;
-            _mediaContent.ReleaseDate = new DateTime(2014, 10, 14);
-            _mediaContent.Distributor = "United States";
-            _mediaContent.Language = "English";
-            _mediaContent.AverageRating = 8;
-            _mediaContent.HeroName = "Matthew";
-            _mediaContent.HeroineName = "Anne";
-            _mediaContent.Director = "Cristopher nolan";
-            _mediaContent.Producer = "Nolan";
-            _mediaContent.ProductionHouse = "Warner Bros";
-            _mediaContentManager.AddMediaContent(_mediaContent);
+            var contentId = new Guid("04B4346F-D4F3-4CF0-96D8-31882845AF36");
+            var mediaContent = new MediaContent()
+            {
+                ContentId = contentId,
+                Title = "Robo",
+                Episode = 0,
+                Genre = "Sci-Fi",
+                TimeLength = 120,
+                ReleaseDate = new DateTime(2014, 10, 11),
+                Distributor = "LycaProductions",
+                Language = "Telugu",
+                AverageRating = 8,
+                HeroName = "Rajini",
+                HeroineName = "Aishwarya",
+                Director = "Shankar",
+                Producer = "Subaskaran",
+                ProductionHouse = "Lyca Production",
+            };
+            _mediaContentManager.AddMediaContent(mediaContent);
         }
 
         [TestMethod()]
-        public void DeleteContentTest()
+        public void DeleteContent_WhenCalled_CheckIsMediaContentIsDeleted()
         {
-            _mediaContentManager.DeleteMediaContent(new Guid(""));
+            var contentId = new Guid("04B4346F-D4F3-4CF0-96D8-31882845AF36");
+            _mediaContentManager.DeleteMediaContent(contentId);
         }
 
         [TestMethod()]
-        public void GetAllContent()
+        public void GetAllContent_WhenCalled_CheckMediaContentIsNotNull()
         {
-            _mediaContentManager.GetAllMediaContents();
+            var contents = _mediaContentManager.GetAllMediaContents();
+            Assert.IsNotNull(contents);
         }
     }
 }
